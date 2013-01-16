@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # Filename: build.py
 
-'''build.py: class build defines to init a kdtree based on the grid coords info.'''
+'''build.py: class Build defines to init a kdtree based on the grid coords info.'''
 
 __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
@@ -9,7 +9,7 @@ import numpy as np
 from kdtree import KDTree
 #from scipy import spatial
 
-class build(Exception):
+class Build(Exception):
   
   def __init__(self, grid_size, grid_corners, grid_rank, grid_dims, grid_center_lat, grid_center_lon, grid_imask):
     '''Comments'''
@@ -62,10 +62,10 @@ if __name__ == '__main__':
   grid_center_lon = [0.5, 0.5, 0.5, 359.5, 359.5, 359.5]
   grid_center_lat = [1.0, 2.0, 3.0, 1.0, 2.0, 3.0] 
   grid_imask = [1, 1, 0, 0, 1, 0]
-  stree_base_obj = build(grid_size, grid_corners, grid_rank, grid_dims, grid_center_lat, grid_center_lon, grid_imask)
+  stree_base_obj = Build(grid_size, grid_corners, grid_rank, grid_dims, grid_center_lat, grid_center_lon, grid_imask)
   stree = stree_base_obj.grow()
   
   pts = np.array([[2.0, 2.0]])
   print stree.query(pts) 
-  #print stree.query_ball_point([2.0, 2.0], 1.0)
+  print stree.query_ball_point([[1.0, 1.0], [2.0, 2.0]], 300.0)
   

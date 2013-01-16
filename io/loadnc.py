@@ -1,14 +1,14 @@
 #! /usr/bin/python
 # Filename: loadnc.py
 
-'''loadnc.py: class Loadnc helps to load grid data from a SCRIP format NetCDF file.'''
+'''loadnc.py: class Loadnc defines to load grid data from a SCRIP format NetCDF file.'''
 
 __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
 import sys
 from Scientific.IO.NetCDF import NetCDFFile as Dataset 
 
-class loadnc(Exception):
+class Loadnc(Exception):
   
   def __init__(self, file_name):
     ''' Initialize grid file object.
@@ -33,7 +33,7 @@ class loadnc(Exception):
     grid_imask = self.__get_grid_imask()
    
     # check dimension info.
-    cond = grid_size > 0 and grid_corners > 0 and grid_rank 
+    cond = grid_size > 0 and grid_corners > 0 and grid_rank and grid_size == grid_dims[0] * grid_dims[1] 
     if cond:
       print '***Successfully reading dimension info from netCDF file %s.*** ' % self.filename
     else: 
@@ -86,8 +86,8 @@ class loadnc(Exception):
     pass
 
 if __name__ == '__main__':
-  nc_obj = loadnc('../grid/T42.nc')
-  grid_size, grid_corners, grid_rank, grid_dims, grid_center_lat, grid_center_lon, grid_imask= nc_obj.load()
+  nc_obj = Loadnc('../grid/T42.nc')
+  grid_size, grid_corners, grid_rank, grid_dims, grid_center_lat, grid_center_lon, grid_imask = nc_obj.load()
   print grid_size
   print grid_corners
   print grid_rank
