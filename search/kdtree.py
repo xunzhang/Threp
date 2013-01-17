@@ -1,6 +1,7 @@
-# stealed from scrip
+# stealed from scipy
 # Copyright Anne M. Archibald 2008
 # Released under the scipy license
+
 import sys
 import numpy as np
 from heapq import heappush, heappop
