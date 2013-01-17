@@ -1,11 +1,12 @@
 #! /usr/bin/python
 # Filename: bilinearbox.py
 
-'''nearest.py: class nearest defines to find the nearest k-points of the query points in a kdtree.'''
+'''bilinearbox.py: class nearest defines to find the nearest k-points of the query points in a kdtree.'''
 
 __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
 import sys
+from matplotlib.path import Path
 from nearest import Search
 
 class Bilinearbox(Search):
@@ -15,8 +16,13 @@ class Bilinearbox(Search):
     self.threshold = 5.0
     self.outside = True
   
+  #Path([[0, 1], [1, 1], [1, 0], [0, 0]]).contains_point([0.5, 0.5])
   def is_contain(self, query_point, vertex_lst):
-    pass
+    cond = Path(vertex_lst).contains_point(query_point) or query_point in vertex_lst
+    if cond:
+      return True
+    else:
+      return False
 
   def reorder(self, coords_lst):
     '''
@@ -38,9 +44,10 @@ class Bilinearbox(Search):
   
   def find_nearest_box(self, query_point):
     box = []
-    res_indx, res_lst = Search.find_nearest_k(self, query_point, 6)
-    print res_indx
-    print res_lst
+    res_indx, res_lst = Search.find_nearest_k(self, query_point, 4)
+    if self.is_contain(query_point, res_lst):
+      self.outside = False
+      print 'Successfully contains.'
       #if not is_contain(query_point, res_lst):
       #res_indx, res_lst = Search.find_nearest_k(query_point, 20)
       # to be coded a algorithm
@@ -48,11 +55,10 @@ class Bilinearbox(Search):
       #  if distance2d() > self.threshold:
       #    pass
       #  print 'Can not find nearest box containing the query point.'
-    self.outside = True
     box = res_lst
-    #self.reorder(box)
-    self.outside = False
-    return box
+    self.reorder(box)
+    print box
+    return self.outside, box
     
 if __name__ == '__main__':
   test_tuple = [(-1,2), (0,0), (2,0), (3,4)]
