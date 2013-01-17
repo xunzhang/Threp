@@ -72,11 +72,14 @@ class Loadnc(Exception):
     __grid_center_lat = self.ncfile.variables[variable_name][:]
     variable_name = 'grid_center_lon'
     __grid_center_lon = self.ncfile.variables[variable_name][:]
+    __grid_center_lat = __grid_center_lat.tolist()
+    __grid_center_lon = __grid_center_lon.tolist()
     return __grid_center_lat, __grid_center_lon
     
   def __get_grid_imask(self):
     variable_name = 'grid_imask'
     __grid_imask = self.ncfile.variables[variable_name][:]
+    __grid_imask = __grid_imask.tolist()
     return __grid_imask
   
   def __get_grid_corner_coords(self):
@@ -88,6 +91,7 @@ class Loadnc(Exception):
 if __name__ == '__main__':
   nc_obj = Loadnc('../grid/T42.nc')
   grid_size, grid_corners, grid_rank, grid_dims, grid_center_lat, grid_center_lon, grid_imask = nc_obj.load()
+  nc_obj.closenc()
   print grid_size
   print grid_corners
   print grid_rank
@@ -96,4 +100,3 @@ if __name__ == '__main__':
   print grid_center_lat[128]
   print grid_center_lon[1]
   print grid_imask[0]
-  nc_obj.closenc()
