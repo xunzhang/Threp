@@ -7,3 +7,4 @@ import sys
 sys.path.append(THREP_DIR+'/io')
 sys.path.append(THREP_DIR+'/search') 
 sys.path.append(THREP_DIR+'/interp') 
+sys.path.append(THREP_DIR+'/solver') 

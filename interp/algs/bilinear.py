@@ -5,12 +5,10 @@
 
 __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
-#import sys
-#sys.path.append("../../search/")
-#sys.path.append("../")
 import threp_import
 from bilinearbox import Bilinearbox
 from interp import Interp
+from bilinear_solver import Bilinear_Solver
 
 class Bilinear(Interp):
   
@@ -21,8 +19,12 @@ class Bilinear(Interp):
   def interp(self):
     print self.dst_grid_center_lon[0]
     print self.dst_grid_center_lat[0]
-    test_point = (self.dst_grid_center_lon[0], self.dst_grid_center_lat[0])
-    self.bilinearbox_obj.find_nearest_box(test_point)
+    #point = (self.dst_grid_center_lon[0], self.dst_grid_center_lat[0])
+    point = (0.0, 0.0)
+    outside_flag, bilinear_box = self.bilinearbox_obj.find_nearest_box(point)
+    bilinear_solver = Bilinear_Solver(point, bilinear_box)
+    bilinear_solver.regular_solve()
+     
     #for i in range(len(self.dst_grid_center_lat)):
     #  self.bilinearbox_obj.find_nearest_box(())
     
