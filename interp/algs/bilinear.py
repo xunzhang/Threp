@@ -17,20 +17,25 @@ class Bilinear(Interp):
     self.bilinearbox_obj = Bilinearbox(self.stree_base_obj, self.stree)
     
   def interp(self):
-    print self.dst_grid_center_lon[0]
-    print self.dst_grid_center_lat[0]
+    #print self.dst_grid_center_lon[0]
+    #print self.dst_grid_center_lat[0]
     #point = (self.dst_grid_center_lon[0], self.dst_grid_center_lat[0])
-    point = (0.0, 0.0)
-    outside_flag, bilinear_box = self.bilinearbox_obj.find_nearest_box(point)
-    bilinear_solver = Bilinear_Solver(point, bilinear_box)
-    bilinear_solver.regular_solve()
-     
-    #for i in range(len(self.dst_grid_center_lat)):
-    #  self.bilinearbox_obj.find_nearest_box(())
+    #point = (0.0, 0.0)
+    
+    n = len(self.dst_grid_center_lon)
+    for i in range(n):
+      if self.dst_grid_imask == 0:
+        continue
+      dst_point = (self.dst_grid_center_lon[i], self.dst_grid_center_lat[i])
+      outside_flag, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
+      bilinear_solver = Bilinear_Solver(dst_point, bilinear_box)
+      bilinear_solver.regular_solve()
+      #for i in range(len(self.dst_grid_center_lat)):
+      #  self.bilinearbox_obj.find_nearest_box(())
     
   #def remap(self): 
 
 if __name__ == '__main__':
   test_obj = Bilinear('../../grid/T42.nc', '../../grid/POP43.nc')
   test_obj.interp()
-  
+    

@@ -14,9 +14,13 @@ class Bilinear_Solver(Solver):
   # |   |  ->   |   |    ->  wgt_lst = [w0, w1, w2, w3]
   # 0---2      w0---w2
   def __init__(self, dst_point, vertex_rect):
-    self.dst_point = dst_point
-    self.vertex_rect = vertex_rect
-    self.wgt_lst = [0.0, 0.0, 0.0, 0.0]
+    Solver.__init__(self, dst_point, vertex_rect)
+    self.vertex_rect = self.neighbor_lst
+    # init wgt_lst as [0.0, 0.0, 0.0, 0.0]
+    self.wgt_lst.append(0.0)
+    self.wgt_lst.append(0.0)
+    self.wgt_lst.append(0.0)
+    self.wgt_lst.append(0.0)
     
   def regular_solve(self):
     # check x-dim regular
@@ -35,6 +39,5 @@ class Bilinear_Solver(Solver):
     self.wgt_lst[1] = (1 - alpha) * beta
     self.wgt_lst[2] = alpha * (1 - beta)
     self.wgt_lst[3] = alpha * beta
-
-    #print self.wgt_lst
+    print self.wgt_lst
 

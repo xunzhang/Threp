@@ -18,10 +18,12 @@ class Interp(Exception):
     
     self.stree_base_obj = Build(self.src_grid_size, self.src_grid_corners, self.src_grid_rank, self.src_grid_dims, self.src_grid_center_lat, self.src_grid_center_lon, self.src_grid_imask)
     self.stree = self.stree_base_obj.grow()
-      
+    
+    # virtual function to do calc wgts  
     def interp(self):
       pass
-
+    
+    # virtual function to remap data 
     def remap(self):
       pass
      
