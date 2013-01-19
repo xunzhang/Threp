@@ -66,6 +66,7 @@ class Idw(Interp):
         print 'My mask is zero!'
         continue
       dst_point = (self.dst_grid_center_lon[i], self.dst_grid_center_lat[i])
+      #dst_point = (300.0, -83.75)
       #neighbor_indx, neighbor_lst = self.idw_obj.find_nearest_k(dst_point, self.nearest_k)
       neighbor_indx, neighbor_lst = self.find_neighbors(dst_point)
       
@@ -77,6 +78,7 @@ class Idw(Interp):
       print ''
 
 if __name__ == '__main__':
-  test_obj = Idw('../../grid/T42.nc', '../../grid/POP43.nc', 4)
+  test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
+  #test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
   test_obj.interp()

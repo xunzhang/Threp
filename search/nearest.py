@@ -6,6 +6,7 @@
 __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
 import kdtree
+from distance import euc_dist
 
 class Search(Exception):
 
@@ -15,6 +16,10 @@ class Search(Exception):
     self.dist = 0.5
     self.delta = 0.25
   
+  def __shuffle(self, pnt, shuf_pair):
+    shuf_pair.sort(cmp = lambda x, y:cmp(euc_dist(x[1], pnt), euc_dist(y[1],pnt)))
+    return [item[0] for item in shuf_pair], [item[1] for item in shuf_pair]
+   
   def find_nearest_k(self, query_point, k = 4):
     result_lst = []
     query = [query_point]
@@ -28,6 +33,13 @@ class Search(Exception):
     # generate result coord pairs.
     for indx in result_indx:
       result_lst.append((self.stree_base.grid_center_lon[indx], self.stree_base.grid_center_lat[indx]))
+    # format shuffle pair:
+    # [(indx1, (lon1, lat1)), (indx2, (lon2, lat2))]
+    shuf_pair = [(result_indx[i], result_lst[i]) for i in range(len(result_indx))]
+    # shuf_pair = (result_indx, result_lst)
+    # shuffer the recursive results, from nearest to far
+    result_indx, result_lst = self.__shuffle(query_point, shuf_pair)
+
     return result_indx, result_lst
 
   def find_nearest_dist(self, query_point, dist = 0.5):
