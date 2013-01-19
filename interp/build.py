@@ -47,6 +47,9 @@ class Build(Exception):
       self.grid_center_lat.append(lat)
     for lon in ghost_point_lon_lst:
       self.grid_center_lon.append(lon)
+    # append relative mask value
+    for i in range(len(ghost_point_lat_lst)):
+      self.grid_imask.append(1)
     
   def grow(self):
     self.__add_ghost_boundary()
