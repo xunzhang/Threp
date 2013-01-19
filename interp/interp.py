@@ -19,12 +19,23 @@ class Interp(Exception):
     self.stree_base_obj = Build(self.src_grid_size, self.src_grid_corners, self.src_grid_rank, self.src_grid_dims, self.src_grid_center_lat, self.src_grid_center_lon, self.src_grid_imask)
     self.stree = self.stree_base_obj.grow()
     
-    # virtual function to do calc wgts  
-    def interp(self):
-      pass
+  # for example, decide if it is land cell
+  def check_all_masks(self, indx, n):
+    checksum = 0
+    for i in indx:
+      if self.src_grid_imask[i] == 0:
+        checksum += 1
+    if checksum == n:
+      return True
+    else:
+      return False
+     
+  # virtual function to do calc wgts  
+  def interp(self):
+    pass
     
-    # virtual function to remap data 
-    def remap(self):
-      pass
+  # virtual function to remap data 
+  def remap(self):
+    pass
      
 

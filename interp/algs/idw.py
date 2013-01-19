@@ -37,20 +37,9 @@ class Idw(Interp):
       sys.exit()
     return a, b
    
-  # decide if it is land cell
-  def check_all_masks(self, indx):
-    checksum = 0
-    for i in indx:
-      if self.src_grid_imask[i] == 0:
-        checksum += 1
-    if checksum == 4:
-      return True
-    else:
-      return False
-    
   def find_neighbors(self, dst_point):
     indx, lst = self.idw_obj.find_nearest_k(dst_point, self.nearest_k * 2)
-    if self.check_all_masks(indx[0:4]):
+    if Interp.check_all_masks(self, indx[0:self.nearest_k], self.nearest_k):
       indx = []
       lst = []
     else:
@@ -66,8 +55,6 @@ class Idw(Interp):
         print 'My mask is zero!'
         continue
       dst_point = (self.dst_grid_center_lon[i], self.dst_grid_center_lat[i])
-      #dst_point = (300.0, -83.75)
-      #neighbor_indx, neighbor_lst = self.idw_obj.find_nearest_k(dst_point, self.nearest_k)
       neighbor_indx, neighbor_lst = self.find_neighbors(dst_point)
       
       idw_solver = Idw_Solver(dst_point, neighbor_lst, self.eps, self.power)
