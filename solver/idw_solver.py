@@ -20,8 +20,8 @@ class Idw_Solver(Solver):
   def solve(self):
     wgt_sum = 0
     for pnt in self.neighbor_lst:
-      #dist = euc_dist(self.dst_point, pnt)
-      dist = sph_dist(self.dst_point, pnt)
+      dist = euc_dist(self.dst_point, pnt)
+      #dist = sph_dist(self.dst_point, pnt)
       val = 1 / (dist + self.eps) **self.power
       self.wgt_lst.append(val)
       wgt_sum +=  val

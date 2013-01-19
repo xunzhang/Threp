@@ -78,7 +78,7 @@ class Idw(Interp):
       print ''
 
 if __name__ == '__main__':
-  test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
-  #test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
+  #test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
+  test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
   test_obj.interp()
