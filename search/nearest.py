@@ -7,6 +7,7 @@ __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
 import kdtree
 from distance import euc_dist
+#from select import select_containing_rect
 
 class Search(Exception):
 

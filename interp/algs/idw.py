@@ -39,6 +39,7 @@ class Idw(Interp):
    
   def find_neighbors(self, dst_point):
     indx, lst = self.idw_obj.find_nearest_k(dst_point, self.nearest_k * 2)
+    # there may be bugs.
     if Interp.check_all_masks(self, indx[0:self.nearest_k], self.nearest_k):
       indx = []
       lst = []
@@ -56,7 +57,9 @@ class Idw(Interp):
         continue
       dst_point = (self.dst_grid_center_lon[i], self.dst_grid_center_lat[i])
       neighbor_indx, neighbor_lst = self.find_neighbors(dst_point)
-      
+      if not neighbor_indx:
+        print 'It must be a land cell.'
+        continue
       idw_solver = Idw_Solver(dst_point, neighbor_lst, self.eps, self.power)
       idw_solver.solve()
       print dst_point
@@ -65,7 +68,7 @@ class Idw(Interp):
       print ''
 
 if __name__ == '__main__':
-  #test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
-  test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
+  test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
+  #test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
   test_obj.interp()

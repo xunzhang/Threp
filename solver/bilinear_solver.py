@@ -23,6 +23,8 @@ class Bilinear_Solver(Solver):
     self.wgt_lst.append(0.0)
     
   def regular_solve(self):
+    print self.dst_point
+    print self.vertex_rect
     # check x-dim regular
     if self.vertex_rect[0][0] != self.vertex_rect[1][0] and self.vertex_rect[2][0] != self.vertex_rect[3][0]:
       print 'X coord is not the same. Not regular box!'
