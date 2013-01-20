@@ -56,6 +56,7 @@ class Bilinear(Interp):
           print 'it is a non-convex quadrangle'
         else:
           print 'normal case'
+          # check is rectangle
           bilinear_solver = Bilinear_Solver(dst_point, bilinear_box)
           bilinear_solver.regular_solve()
       print dst_point
@@ -66,7 +67,8 @@ class Bilinear(Interp):
   #def remap(self): 
 
 if __name__ == '__main__':
-  test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
+  test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
+  #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
   test_obj.interp()
     
