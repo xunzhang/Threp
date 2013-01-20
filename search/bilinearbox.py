@@ -9,6 +9,7 @@ import sys
 from matplotlib.path import Path
 from nearest import Search
 from selectrect import select_containing_rect
+from clockwise_sort import clockwise_sort
 
 class Bilinearbox(Search):
 
@@ -16,24 +17,6 @@ class Bilinearbox(Search):
     Search.__init__(self, stree_base, stree)
     self.threshold = 5.0
     self.outside = True
-  
-  def reorder(self, coords_lst):
-    '''
-    B---D
-    |   |
-    A---C
-    '''
-    # check the input lst
-    if len(coords_lst) != 4:
-      print 'invalid input in reorder func.'
-      sys.exit()
-    # use default sort of 4 tuples, by cmp the first dim
-    coords_lst.sort()
-    # reorder A,B & C,D
-    if coords_lst[0][1] > coords_lst[1][1]:
-      coords_lst[0], coords_lst[1] = coords_lst[1], coords_lst[0]
-    if coords_lst[2][1] > coords_lst[3][1]:
-      coords_lst[2], coords_lst[3] = coords_lst[3], coords_lst[2]
   
   def filter_mask(self, indx, lst):
     a = []
@@ -54,8 +37,11 @@ class Bilinearbox(Search):
     # find bilinear_box 
     flag, box_indx, box = select_containing_rect(query_point, res_indx, res_lst)
     self.outside = flag
-    self.reorder(box)
-    #self.reorder(box_indx, box)
+    if flag:
+      print 'Can not be contained.'
+    else:
+      clockwise_sort(box)
+      #clockwise_sort(box_indx, box)
     return self.outside, box_indx, box
       
 if __name__ == '__main__':
