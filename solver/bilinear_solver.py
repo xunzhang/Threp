@@ -10,10 +10,6 @@ from solver import Solver
 class Bilinear_Solver(Solver):
   
   # Suppose the vertex rect list is sorted by:
-  # 1---3      w1---w3
-  # |   |  ->   |   |    ->  wgt_lst = [w0, w1, w2, w3]
-  # 0---2      w0---w2
-  # Suppose the vertex rect list is sorted by:
   # 1---2      w1---w2
   # |   |  ->   |   |    ->  wgt_lst = [w0, w1, w2, w3]
   # 0---3      w0---w3
@@ -43,5 +39,5 @@ class Bilinear_Solver(Solver):
     self.wgt_lst[1] = (1 - alpha) * beta
     self.wgt_lst[2] = alpha * beta
     self.wgt_lst[3] = alpha * (1 - beta)
-    print self.wgt_lst
+    #print self.wgt_lst
 

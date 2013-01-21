@@ -60,5 +60,5 @@ def select_containing_rect(pnt, neighbor_indx, neighbor_lst):
             rect.append(neighbor_lst[l])
             if is_contain(pnt, rect):
               return False, [neighbor_indx[i], neighbor_indx[j], neighbor_indx[k], neighbor_indx[l]], rect
-  return True, [neighbor_indx[0:4]], [neighbor_lst[0:4]]
+  return True, neighbor_indx[0:4], neighbor_lst[0:4]
         

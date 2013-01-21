@@ -44,21 +44,20 @@ class Bilinear(Interp):
         print 'It must be a land cell.'
         continue
       outside_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
-      print outside_flag
       if outside_flag:
-        print 'it is reget'  
+        # non-convex quadrangle case
+        if not is_convex_quadrangle(bilinear_box):
+          print 'it is a non-convex quadrangle.'
       else:
         # check if three of them is collineation
         if self.check_triangle(bilinear_box):
           print 'it is a bounding triangle.'
-        # it is a non-convex quadrangle
-        elif not is_convex_quadrangle(bilinear_box):
-          print 'it is a non-convex quadrangle'
         else:
           print 'normal case'
           # check is rectangle
           bilinear_solver = Bilinear_Solver(dst_point, bilinear_box)
           bilinear_solver.regular_solve()
+          print bilinear_solver.wgt_lst
       print dst_point
       print bilinear_box_indx
       print bilinear_box
@@ -67,8 +66,8 @@ class Bilinear(Interp):
   #def remap(self): 
 
 if __name__ == '__main__':
-  test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
-  #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
+  #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
+  test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
   test_obj.interp()
     
