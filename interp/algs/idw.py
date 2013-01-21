@@ -61,6 +61,17 @@ class Idw(Interp):
         print 'It must be a land cell.'
         continue
       idw_solver = Idw_Solver(dst_point, neighbor_lst, self.eps, self.power)
+      
+      # if dst point is coincide with a src point
+      if dst_point in neighbor_lst:
+        print 'coincide'
+        for item in neighbor_lst:
+          if item == dst_point:
+            idw_solver.wgt_lst.append(1)
+          else:
+            idw_solver.wgt_lst.append(0)
+        continue
+      
       idw_solver.solve()
       
       # transfer ghost indx
