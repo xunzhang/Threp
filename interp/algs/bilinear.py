@@ -46,6 +46,13 @@ class Bilinear(Interp):
         print 'It must be a land cell.'
         continue
       outside_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
+      
+      # check if the dst_point is just a point in src grid.
+      # if coincide with a src point, it must be the first search result
+      if dst_point in bilinear_box:
+        print 'coincide'
+        # set 4 wgts as [1, 0, 0, 0]
+        continue
       if outside_flag:
         # non-convex quadrangle case
         if not is_convex_quadrangle(bilinear_box):
@@ -72,8 +79,8 @@ class Bilinear(Interp):
   #def remap(self): 
 
 if __name__ == '__main__':
-  #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
-  test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
+  test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
+  #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
   test_obj.interp()
     
