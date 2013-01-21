@@ -39,6 +39,8 @@ class Bilinear(Interp):
         print 'My mask is zero!'
         continue
       dst_point = (self.dst_grid_center_lon[i], self.dst_grid_center_lat[i])
+      # debug recovery function
+      #dst_point = (357.625, -82.375)
       indx, lst = self.bilinearbox_obj.find_nearest_k(dst_point, 4)
       if Interp.check_all_masks(self, indx, 4):
         print 'It must be a land cell.'
@@ -58,6 +60,10 @@ class Bilinear(Interp):
           bilinear_solver = Bilinear_Solver(dst_point, bilinear_box)
           bilinear_solver.regular_solve()
           print bilinear_solver.wgt_lst
+
+      # transfer ghost bilinear_box_indx
+      Interp.indx_recovery(self, bilinear_box_indx)
+      
       print dst_point
       print bilinear_box_indx
       print bilinear_box

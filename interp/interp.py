@@ -29,7 +29,19 @@ class Interp(Exception):
       return True
     else:
       return False
-     
+  
+  def indx_recovery(self, indx_lst):
+    tmp_indx = []
+    for i in indx_lst:
+      if i >= self.src_grid_size:
+        print 'recovery ghost index.'
+        if i / self.src_grid_dims[1] == 1:
+          offset = 0
+        else:
+          offset = self.src_grid_dims[0] - 1
+        tmp_indx.append((i % self.src_grid_dims[1]) * self.src_grid_dims[0] + offset)
+    indx_lst = tmp_indx
+      
   # virtual function to do calc wgts  
   def interp(self):
     pass

@@ -27,6 +27,7 @@ class Build(Exception):
     coords_pair_lst = zip(self.grid_center_lon, self.grid_center_lat)
     return coords_pair_lst
   
+  # logical rectangle only, by now 
   def __add_ghost_boundary(self):
     # now I just add one layer ghost
     ghost_point_lat_lst = []
@@ -34,13 +35,13 @@ class Build(Exception):
     # trav every lat, set leftest boundary
     for i in range(self.grid_dims[1]):
       # insert rightest ghost point
-      ghost_point_lat_lst.append(self.grid_center_lat[i])
-      ghost_point_lon_lst.append(self.grid_center_lon[self.grid_dims[1]] - 360)
+      ghost_point_lat_lst.append(self.grid_center_lat[i + i * self.grid_dims[0]])
+      ghost_point_lon_lst.append(self.grid_center_lon[0] + 360)
     # trav every lat, set rightest boundary 
     for i in range(self.grid_dims[1]):
       # insert leftest ghost point
-      ghost_point_lat_lst.append(self.grid_center_lat[i])
-      ghost_point_lon_lst.append(self.grid_center_lon[0] + 360)
+      ghost_point_lat_lst.append(self.grid_center_lat[i + i * self.grid_dims[0]])
+      ghost_point_lon_lst.append(self.grid_center_lon[self.grid_dims[0] - 1] - 360)
     
     # insert ghost_point_lst to grid_center_lst
     for lat in ghost_point_lat_lst:

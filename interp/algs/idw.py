@@ -62,6 +62,10 @@ class Idw(Interp):
         continue
       idw_solver = Idw_Solver(dst_point, neighbor_lst, self.eps, self.power)
       idw_solver.solve()
+      
+      # transfer ghost indx
+      Interp.indx_recovery(self, neighbor_indx)
+      
       print dst_point
       print neighbor_lst
       print idw_solver.wgt_lst
