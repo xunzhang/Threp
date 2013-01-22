@@ -10,6 +10,7 @@ from matplotlib.path import Path
 from nearest import Search
 from selectrect import select_containing_rect
 from clockwise_sort import clockwise_sort
+from clockwise_sort import clockwise_sort_indx
 
 class Bilinearbox(Search):
 
@@ -40,8 +41,8 @@ class Bilinearbox(Search):
     if flag:
       print 'Can not be contained.'
     else:
-      clockwise_sort(box)
-      #clockwise_sort(box_indx, box)
+      box_indx, box = clockwise_sort_indx(box_indx, box)
+      box = clockwise_sort(box)
     return self.outside, box_indx, box
       
 if __name__ == '__main__':

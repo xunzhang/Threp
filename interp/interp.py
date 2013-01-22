@@ -35,7 +35,7 @@ class Interp(Exception):
     for i in indx_lst:
       if i >= self.src_grid_size:
         print 'recovery ghost index.'
-        if i / self.src_grid_dims[1] == 1:
+        if (i / self.src_grid_dims[1]) == 1:
           offset = 0
         else:
           offset = self.src_grid_dims[0] - 1

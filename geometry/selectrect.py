@@ -35,7 +35,7 @@ def is_convex_quadrangle(box):
 def is_contain(query_point, vertex_lst):
   if len(vertex_lst) == 4:
     vertex_box = copy.deepcopy(vertex_lst)
-    clockwise_sort(vertex_box)
+    vertex_box = clockwise_sort(vertex_box)
     polygon = Polygon(vertex_box)
   else:
     polygon = Polygon(vertex_lst)
