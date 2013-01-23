@@ -15,14 +15,14 @@ class Solver(Exception):
     self.neighbor_lst = neighbor_lst
     self.wgt_lst = []
   
-  def __check_delta(delta):
+  def __check_delta(self, delta):
     if delta < 0:
       return False
     else:
       return True
      
   # solveing quadratics with a * x^2 + b * x + c = 0
-  def solve_quadratics(a, b ,c):
+  def solve_quadratics(self, a, b ,c):
     delta = b * b - 4 * a * c
     if not __check_delta(delta):
       print 'Error in solving a quadratics. There must be not imaginary root in Threp.'
@@ -33,7 +33,7 @@ class Solver(Exception):
     r2 = (-b - delta) / down
     return r1, r2
 
-  def select_legal_root(root1, root2):
+  def select_legal_root(self, root1, root2):
     if root1 >= 0 and root1 <= 1:
       print 'root1 is legal.'
       r = root1

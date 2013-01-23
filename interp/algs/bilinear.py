@@ -9,6 +9,7 @@ import threp_import
 from bilinearbox import Bilinearbox
 from interp import Interp
 from bilinear_solver import Bilinear_Solver
+from bilinear_predictor import Bilinear_Predictor
 from collineation import check_collineation
 from selectrect import is_convex_quadrangle 
 
@@ -65,32 +66,32 @@ class Bilinear(Interp):
         print 'coincide'
         # set 4 wgts as [1, 0, 0, 0]
         continue
-      if outside_flag:
-        
-        #bilinear_solver = Bilinear_Predictor(dst_point, bilinear_box)
-        # non-convex quadrangle case
-        if not is_convex_quadrangle(bilinear_box):
-          print 'it is a non-convex quadrangle.'
-      else:
-
-        bilinear_solver = Bilinear_Solver(dst_point, bilinear_box)        
-        
-        # check if three of them is collineation
-        if self.check_triangle(bilinear_box):
-          print 'it is a bounding triangle.'
+      # if can not be contained and bounding rect is a triangle
+      # deciding a triangle by checking if three of them is collinearion
+      if outside_flag or self.check_triangle(bilinear_box):
+        print 'predictor case.'
+        bilinear_solver = Bilinear_Predictor(dst_point, bilinear_box)
+        bilinear_solver.predict() 
+        if outside_flag:
+          # non-convex quadrangle case
+          if not is_convex_quadrangle(bilinear_box):
+            print 'it is a non-convex quadrangle.'
+        # else it is a triangle box.
         else:
-          print 'normal case'
-          branch = self.switch(bilinear_box)
-          if branch == 1:
-            bilinear_solver.solve_bilinear_case1()
-          if branch == 2:
-            bilinear_solver.solve_bilinear_case2()
-          if branch == 3: 
-            bilinear_solver.solve_bilinear_case3()
+          print 'it is a bounding triangle.'
+        print bilinear_solver.wgt_lst
+      else:
+        print 'normal case'
+        bilinear_solver = Bilinear_Solver(dst_point, bilinear_box)        
+        branch = self.switch(bilinear_box)
+        if branch == 1:
+          bilinear_solver.solve_bilinear_case1()
+        if branch == 2:
+          bilinear_solver.solve_bilinear_case2()
+        if branch == 3: 
+          bilinear_solver.solve_bilinear_case3()
             
-          # check is rectangle
-          #bilinear_solver.regular_solve()
-          print bilinear_solver.wgt_lst
+        print bilinear_solver.wgt_lst
 
       # transfer ghost bilinear_box_indx
       Interp.indx_recovery(self, bilinear_box_indx)
