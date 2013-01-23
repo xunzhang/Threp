@@ -39,7 +39,11 @@ class Bilinear_Predictor(Predictor):
   def predict(self):
     dst_pnt_vec = np.matrix('1 ' + str(self.dst_point[0]) + ' ' + str(self.dst_point[1]) + ' ' + str(self.dst_point[0] * self.dst_point[1]))
     print self.A
-    inv_A = np.linalg.inv(self.A)
+    if np.rank(self.A) != 4:
+      print 'no root!'
+    else:
+      print 'rrro'
+    inv_A = np.linalg.pinv(self.A)
     wgt = dst_pnt_vec * inv_A
     self.wgt_lst = wgt.tolist()[0]
     

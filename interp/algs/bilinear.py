@@ -73,6 +73,7 @@ class Bilinear(Interp):
         bilinear_solver = Bilinear_Predictor(dst_point, bilinear_box)
         bilinear_solver.predict() 
         if outside_flag:
+          print 'outside'
           # non-convex quadrangle case
           if not is_convex_quadrangle(bilinear_box):
             print 'it is a non-convex quadrangle.'
