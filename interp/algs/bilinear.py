@@ -26,6 +26,18 @@ class Bilinear(Interp):
             return True
     return False
   
+  def switch(self, rect_box):
+    cross_pdt_h = (rect_box[0][0] - rect_box[1][0]) * (rect_box[3][1] - rect_box[2][1]) - (rect_box[0][1] - rect_box[1][1]) * (rect_box[3][0] - rect_box[2][0])
+    cross_pdt_v = (rect_box[1][0] - rect_box[2][0]) * (rect_box[0][1] - rect_box[3][1]) - (rect_box[1][1] - rect_box[2][1]) * (rect_box[0][0] - rect_box[3][0])
+    if cross_pdt_h != 0 and cross_pdt_v != 0:
+      return 1
+    elif cross_pdt_h == 0 and cross_pdt_v == 0:
+      return 3
+    elif cross_pdt_h == 0:
+      return 1
+    else:
+      return 2
+   
   # tackle mask problem 
   def interp(self):
     #print self.dst_grid_center_lon[0]
@@ -54,18 +66,30 @@ class Bilinear(Interp):
         # set 4 wgts as [1, 0, 0, 0]
         continue
       if outside_flag:
+        
+        #bilinear_solver = Bilinear_Predictor(dst_point, bilinear_box)
         # non-convex quadrangle case
         if not is_convex_quadrangle(bilinear_box):
           print 'it is a non-convex quadrangle.'
       else:
+
+        bilinear_solver = Bilinear_Solver(dst_point, bilinear_box)        
+        
         # check if three of them is collineation
         if self.check_triangle(bilinear_box):
           print 'it is a bounding triangle.'
         else:
           print 'normal case'
+          branch = self.switch(bilinear_box)
+          if branch == 1:
+            bilinear_solver.solve_bilinear_case1()
+          if branch == 2:
+            bilinear_solver.solve_bilinear_case2()
+          if branch == 3: 
+            bilinear_solver.solve_bilinear_case3()
+            
           # check is rectangle
-          bilinear_solver = Bilinear_Solver(dst_point, bilinear_box)
-          bilinear_solver.regular_solve()
+          #bilinear_solver.regular_solve()
           print bilinear_solver.wgt_lst
 
       # transfer ghost bilinear_box_indx
