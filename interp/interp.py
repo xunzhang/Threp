@@ -19,6 +19,10 @@ class Interp(Exception):
     self.stree_base_obj = Build(self.src_grid_size, self.src_grid_corners, self.src_grid_rank, self.src_grid_dims, self.src_grid_center_lat, self.src_grid_center_lon, self.src_grid_imask)
     self.stree = self.stree_base_obj.grow()
     
+    self.interp_wgt = []
+    self.interp_box_indx = []
+    self.interp_box = []
+        
   # for example, decide if it is land cell
   def check_all_masks(self, indx, n):
     checksum = 0
@@ -41,6 +45,7 @@ class Interp(Exception):
           offset = self.src_grid_dims[0] - 1
         tmp_indx.append((i % self.src_grid_dims[1]) * self.src_grid_dims[0] + offset)
     indx_lst = tmp_indx
+    return indx_lst
       
   # virtual function to do calc wgts  
   def interp(self):

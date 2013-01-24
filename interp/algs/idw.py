@@ -75,16 +75,21 @@ class Idw(Interp):
       idw_solver.solve()
       
       # transfer ghost indx
-      Interp.indx_recovery(self, neighbor_indx)
+      neighbor_indx = Interp.indx_recovery(self, neighbor_indx)
       
+      # store result into objs
+      self.interp_wgt = idw_solver.wgt_lst
+      self.interp_box_indx = neighbor_indx
+      self.interp_box = neighbor_lst
+
       print dst_point
       print neighbor_lst
       print idw_solver.wgt_lst
       print ''
 
 if __name__ == '__main__':
-  test_obj = Idw('../../grid/ll2.5deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
-  #test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
+  #test_obj = Idw('../../grid/ll2.5deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
+  test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
   #test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
   test_obj.interp()

@@ -95,8 +95,13 @@ class Bilinear(Interp):
         print bilinear_solver.wgt_lst
 
       # transfer ghost bilinear_box_indx
-      Interp.indx_recovery(self, bilinear_box_indx)
+      bilinear_box_indx = Interp.indx_recovery(self, bilinear_box_indx)
       
+      # store result into objs
+      self.interp_wgt = idw_solver.wgt_lst
+      self.interp_box_indx = bilinear_box_indx
+      self.interp_box = bilinear_box
+       
       print dst_point
       print bilinear_box_indx
       print bilinear_box
