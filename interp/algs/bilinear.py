@@ -98,7 +98,7 @@ class Bilinear(Interp):
       bilinear_box_indx = Interp.indx_recovery(self, bilinear_box_indx)
       
       # store result into objs
-      self.interp_wgt = idw_solver.wgt_lst
+      self.interp_wgt = bilinear_solver.wgt_lst
       self.interp_box_indx = bilinear_box_indx
       self.interp_box = bilinear_box
        
@@ -113,5 +113,6 @@ if __name__ == '__main__':
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
   test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
+  #test_obj = Bilinear('../../grid/T42.nc', '../../grid/ll1deg_grid.nc')
   test_obj.interp()
-    
+     

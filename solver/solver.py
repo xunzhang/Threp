@@ -24,7 +24,7 @@ class Solver(Exception):
   # solveing quadratics with a * x^2 + b * x + c = 0
   def solve_quadratics(self, a, b ,c):
     delta = b * b - 4 * a * c
-    if not __check_delta(delta):
+    if not self.__check_delta(delta):
       print 'Error in solving a quadratics. There must be not imaginary root in Threp.'
       sys.exit()
     delta = math.sqrt(delta)
