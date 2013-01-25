@@ -20,6 +20,6 @@ command = 'cp ./config/' + filename + ' ./interp/algs' + filename
 os.system(command)
 command = 'cp ./config/' + filename + ' ./search/' + filename
 os.system(command)
-command = 'cp ./config/' + filename + ' ./interp/solver' + filename
+command = 'cp ./config/' + filename + ' ./solver' + filename
 os.system(command)
 
