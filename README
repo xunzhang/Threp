@@ -2,6 +2,6 @@ Interpolation is a bridge links the discrete space to the continuous space, in o
 
 Interpolation in Coupled Earth System Model is something called 'Remap' or 'Regridding'. It's a special application of interpolation. 
 
-Also, it is a little different from traditional interpolation in Computer Graphics. We must seperate the interpolation here into two step:i). Generate weights, ii). Calculate values, according to the specific application scene. What's more, interpolation here happens on the surface of the earth, so we must take 'Polar Problem' and 'Periodic Boundary Problem' into account.
+Also, it is a little different from traditional interpolation in Computer Graphics. We must seperate the interpolation here into two step:i). Generate weights, ii). Calculate values, according to the specific application scene. What's more, interpolation here happens on surface of the earth, so we must take 'Polar Problem' and 'Periodic Boundary Problem' into account. More importantly, we must 'keep conservative' during flux remapping process..
 
 Embrace Threp!
