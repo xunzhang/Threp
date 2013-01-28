@@ -79,7 +79,7 @@ class Bilinear(Interp):
         continue
       # find a bilinear box
       outside_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
-        
+      
       # if can not be contained or bounding rect is a triangle
       # deciding a triangle by checking if three of them is collinearion
       if outside_flag or self.check_triangle(bilinear_box):
@@ -96,6 +96,8 @@ class Bilinear(Interp):
         else:
           print 'it is a bounding triangle box.'
       else:
+        print dst_point  
+        print bilinear_box
         print 'normal case'
         bilinear_solver = Bilinear_Solver(dst_point, bilinear_box) 
         branch = self.switch(bilinear_box)
