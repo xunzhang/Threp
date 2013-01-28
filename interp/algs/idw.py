@@ -52,7 +52,7 @@ class Idw(Interp):
       indx, lst = self.select_k(indx, lst, self.nearest_k)
     return indx, lst
     
-  # interp process in Idw sub class.
+  # interp process in Idw subclass.
   def interp(self):
     n = len(self.dst_grid_center_lon)
     # traverse dst pnt
@@ -76,7 +76,7 @@ class Idw(Interp):
       # normal case, init idw_solver 
       idw_solver = Idw_Solver(dst_point, neighbor_lst, self.eps, self.power)
       
-      # decide if dst point is coincide with a src pnt
+      # decide if dst pnt is coincide with a src pnt
       if dst_point in neighbor_lst:
         print 'coincide'
         for item in neighbor_lst:
