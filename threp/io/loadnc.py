@@ -5,7 +5,9 @@
 
 __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
+import re
 import sys
+import math
 from Scientific.IO.NetCDF import NetCDFFile as Dataset 
 
 class Loadnc(Exception):
@@ -74,6 +76,12 @@ class Loadnc(Exception):
     __grid_center_lon = self.ncfile.variables[variable_name][:]
     __grid_center_lat = __grid_center_lat.tolist()
     __grid_center_lon = __grid_center_lon.tolist()
+    
+    # transform radians to degrees
+    if re.findall('r?R?ad', self.ncfile.variables[variable_name].units):
+      __grid_center_lat = [item * 180 / math.pi for item in __grid_center_lat]
+      __grid_center_lon = [item * 180 / math.pi for item in __grid_center_lon]
+      
     return __grid_center_lat, __grid_center_lon
     
   def __get_grid_imask(self):

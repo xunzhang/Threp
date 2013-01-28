@@ -37,6 +37,11 @@ class Idw(Interp):
       if num == k:
         break
     if num < k:
+      print indx
+      print lst
+      for i in indx:
+        print self.src_grid_imask[i]
+      print num
       print 'Bugs!!!'
       sys.exit()
     return a, b
@@ -108,7 +113,8 @@ class Idw(Interp):
 
 if __name__ == '__main__':
   #test_obj = Idw('../../grid/ll2.5deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
-  test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
+  #test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
   #test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
+  test_obj = Idw('../../grid/T42.nc', '../../grid/POP43.nc', 4)
   test_obj.interp()

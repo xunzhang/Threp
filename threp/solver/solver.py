@@ -40,5 +40,7 @@ class Solver(Exception):
     if root2 >= 0 and root2 <= 1:
       print 'root2 is legal.'
       r = root2
+    print root1
+    print root2
     return r  
 

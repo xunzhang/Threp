@@ -35,9 +35,9 @@ class Bilinear(Interp):
     elif cross_pdt_h == 0 and cross_pdt_v == 0:
       return 3
     elif cross_pdt_h == 0:
-      return 1
-    else:
       return 2
+    else:
+      return 1
    
   # interp process in Bilinear subclass.
   def interp(self):
@@ -60,7 +60,7 @@ class Bilinear(Interp):
       # case ocn2atm, a atm cell with a land cell below
       if Interp.check_all_masks(self, indx, 4):
         print 'It must be a land cell.'
-        self.remap_matrix.appned([])
+        self.remap_matrix.append([])
         self.remap_matrix_indx.append([])
         continue
       # decide if dst pnt is coincide with a src pnt
@@ -79,7 +79,7 @@ class Bilinear(Interp):
         continue
       # find a bilinear box
       outside_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
-      
+        
       # if can not be contained or bounding rect is a triangle
       # deciding a triangle by checking if three of them is collinearion
       if outside_flag or self.check_triangle(bilinear_box):
@@ -128,7 +128,8 @@ class Bilinear(Interp):
 
 if __name__ == '__main__':
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
-  test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
+  test_obj = Bilinear('../../grid/POP43.nc', '../../grid/ll1deg_grid.nc')
+  #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/T42.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
   #test_obj = Bilinear('../../grid/T42.nc', '../../grid/ll1deg_grid.nc')
   test_obj.interp()
