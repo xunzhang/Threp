@@ -26,7 +26,7 @@ class Bilinear(Interp):
           if check_collineation(box[i], box[j], box[k]):
             return True
     return False
-  
+    
   def switch(self, rect_box):
     cross_pdt_h = (rect_box[0][0] - rect_box[1][0]) * (rect_box[3][1] - rect_box[2][1]) - (rect_box[0][1] - rect_box[1][1]) * (rect_box[3][0] - rect_box[2][0])
     cross_pdt_v = (rect_box[1][0] - rect_box[2][0]) * (rect_box[0][1] - rect_box[3][1]) - (rect_box[1][1] - rect_box[2][1]) * (rect_box[0][0] - rect_box[3][0])
@@ -48,23 +48,30 @@ class Bilinear(Interp):
     
     n = len(self.dst_grid_center_lon)
     for i in range(n):
+      # if dst point's mask is 0, no need to calc
       if self.dst_grid_imask[i] == 0:
         print 'My mask is zero!'
         continue
+      
       dst_point = (self.dst_grid_center_lon[i], self.dst_grid_center_lat[i])
       # debug recovery function
       #dst_point = (357.625, -82.375)
+      
+      # For example, ocn2atm, check if it is a land underlying surface with a atm cell.
       indx, lst = self.bilinearbox_obj.find_nearest_k(dst_point, 4)
       if Interp.check_all_masks(self, indx, 4):
         print 'It must be a land cell.'
         continue
+      
+      # find a bilinear box
       outside_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
       
       # check if the dst_point is just a point in src grid.
-      # if coincide with a src point, it must be the first search result
+      # if coincide with a src point, it must be the first search result(that's why after find a bilinear box)
       if dst_point in bilinear_box:
         print 'coincide'
         # set 4 wgts as [1, 0, 0, 0]
+        self.interp_wgt = [1.0, 0.0, 0.0, 0.0]
         continue
       # if can not be contained and bounding rect is a triangle
       # deciding a triangle by checking if three of them is collinearion
@@ -110,8 +117,8 @@ class Bilinear(Interp):
   #def remap(self): 
 
 if __name__ == '__main__':
-  #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
-  test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
+  test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
+  #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/ll1deg_grid.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
   #test_obj = Bilinear('../../grid/T42.nc', '../../grid/ll1deg_grid.nc')
   test_obj.interp()
