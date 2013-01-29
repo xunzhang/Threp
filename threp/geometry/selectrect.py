@@ -46,10 +46,10 @@ def is_contain(query_point, vertex_lst):
 
 def select_containing_rect(pnt, neighbor_indx, neighbor_lst):
   pnt_num = len(neighbor_lst)
-  if pnt_num > 32:
+  if pnt_num > 35:
     print 'Bug!!'
     sys.exit(), 
-  # pnt_num must be less than 16, i < j < k
+  # pnt_num must be less than 35, i < j < k
   for i in range(pnt_num):
     for j in range(i + 1, pnt_num):
       for k in range(j + 1, pnt_num):

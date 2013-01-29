@@ -35,9 +35,11 @@ class Bilinear_Solver(Solver):
     y41 = self.vertex_rect[3][1] - self.vertex_rect[0][1]
 
     a = x34 * y21 - x21 * y34
-    b = self.dst_point[0] * (y34 - y21) + self.dst_point[1] * (x21 - x34) + y34 * self.vertex_rect[0][0] - x34 * self.vertex_rect[0][1] + self.vertex_rect[3][0] * y21 - self.vertex_rect[3][1] * x21
+    b = self.dst_point[0] * (y34 - y21) + self.dst_point[1] * (x21 - x34) - y34 * self.vertex_rect[0][0] + x34 * self.vertex_rect[0][1] + self.vertex_rect[3][0] * y21 - self.vertex_rect[3][1] * x21
     c = self.dst_point[0] * y41 - self.dst_point[1] * x41 + self.vertex_rect[3][0] * self.vertex_rect[0][1] - self.vertex_rect[0][0] * self.vertex_rect[3][1]
-    
+    print a
+    print b
+    print c 
     t1, t2 = Solver.solve_quadratics(self, a, b, c)
     t = Solver.select_legal_root(self, t1, t2)
     s = (self.dst_point[0] - self.vertex_rect[0][0] - x21 * t) / (self.vertex_rect[3][0] + x34 * t - self.vertex_rect[0][0] - x21 * t)
@@ -98,3 +100,5 @@ class Bilinear_Solver(Solver):
     self.wgt_lst[3] = alpha * (1 - beta)
     #print self.wgt_lst
 
+if __name__ == '__main__':
+  pass 

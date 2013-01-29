@@ -32,7 +32,7 @@ class Bilinearbox(Search):
   # prevent all masked out in bilinear.py(before calling this function) 
   def find_nearest_box(self, query_point):
     # find nearest 16
-    res_indx, res_lst = Search.find_nearest_k(self, query_point, 32)
+    res_indx, res_lst = Search.find_nearest_k(self, query_point, 35)
     # filter the masked points
     res_indx, res_lst = self.filter_mask(res_indx, res_lst)
     # find bilinear_box 
