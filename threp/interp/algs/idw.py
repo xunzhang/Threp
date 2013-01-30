@@ -37,18 +37,15 @@ class Idw(Interp):
       if num == k:
         break
     if num < k:
-      print indx
-      print lst
-      for i in indx:
-        print self.src_grid_imask[i]
-      print num
-      print 'Bugs!!!'
-      sys.exit()
+      #for i in indx:
+      #  print self.src_grid_imask[i]
+      print 'Not full k'
+      #sys.exit()
     return a, b
   
   # calc k idw neighbors, sorted, with no mask 
   def find_idw_neighbors(self, dst_point):
-    indx, lst = self.idw_obj.find_nearest_k(dst_point, self.nearest_k * 2)
+    indx, lst = self.idw_obj.find_nearest_k(dst_point, self.nearest_k * 4)
     # there may be bugs.
     if Interp.check_all_masks(self, indx[0:self.nearest_k], self.nearest_k):
       indx = []
@@ -65,6 +62,8 @@ class Idw(Interp):
       # ignore masked pnt
       if self.dst_grid_imask[i] == 0:
         print 'My mask is zero!'
+        self.remap_matrix.append([])
+        self.remap_matrix_indx.append([])
         continue
 
       dst_point = (self.dst_grid_center_lon[i], self.dst_grid_center_lat[i])
@@ -111,10 +110,14 @@ class Idw(Interp):
       self.remap_matrix.append(idw_solver.wgt_lst)
       self.remap_matrix_indx.append(neighbor_indx)
 
+    print 'remap_matrix size is:'
+    print len(self.remap_matrix)
+
 if __name__ == '__main__':
   #test_obj = Idw('../../grid/ll2.5deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
   #test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
   #test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
+  test_obj = Idw('../../../grid/POP43.nc', '../../../grid/ll1deg_grid.nc', 4)
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
-  test_obj = Idw('../../grid/T42.nc', '../../grid/POP43.nc', 4)
+  #test_obj = Idw('../../grid/T42.nc', '../../grid/POP43.nc', 4)
   test_obj.interp()

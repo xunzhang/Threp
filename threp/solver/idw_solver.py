@@ -12,7 +12,7 @@ from distance import sph_dist
 
 class Idw_Solver(Solver):
   
-  def __init__(self, dst_point, neighbor_lst, eps, power):
+  def __init__(self, dst_point, neighbor_lst, eps = 1.0e-6, power = 1):
     Solver.__init__(self, dst_point, neighbor_lst)
     self.eps = eps
     self.power = power

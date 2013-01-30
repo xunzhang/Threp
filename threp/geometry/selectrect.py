@@ -46,8 +46,8 @@ def is_contain(query_point, vertex_lst):
 
 def select_containing_rect(pnt, neighbor_indx, neighbor_lst):
   pnt_num = len(neighbor_lst)
-  if pnt_num > 35:
-    print 'Bug!!'
+  if pnt_num > 24:
+    print 'Bugs in selectrect.py!!'
     sys.exit(), 
   # pnt_num must be less than 35, i < j < k
   for i in range(pnt_num):

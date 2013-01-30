@@ -18,6 +18,7 @@ class Bilinearbox(Search):
     Search.__init__(self, stree_base, stree)
     self.threshold = 5.0
     self.outside = True
+    self.full = True
   
   def filter_mask(self, indx, lst):
     a = []
@@ -31,10 +32,12 @@ class Bilinearbox(Search):
   
   # prevent all masked out in bilinear.py(before calling this function) 
   def find_nearest_box(self, query_point):
-    # find nearest 16
-    res_indx, res_lst = Search.find_nearest_k(self, query_point, 35)
+    # find nearest 24
+    res_indx, res_lst = Search.find_nearest_k(self, query_point, 24)
     # filter the masked points
     res_indx, res_lst = self.filter_mask(res_indx, res_lst)
+    if len(res_indx) < 4:
+      self.full = False
     # find bilinear_box 
     flag, box_indx, box = select_containing_rect(query_point, res_indx, res_lst)
     self.outside = flag
@@ -43,7 +46,7 @@ class Bilinearbox(Search):
     else:
       box_indx, box = clockwise_sort_indx(box_indx, box)
       box = clockwise_sort(box)
-    return self.outside, box_indx, box
+    return self.outside, self.full, box_indx, box
       
 if __name__ == '__main__':
   test_tuple = [(-1,2), (0,0), (2,0), (3,4)]

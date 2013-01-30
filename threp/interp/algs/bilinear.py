@@ -12,6 +12,7 @@ from bilinear_solver import Bilinear_Solver
 from bilinear_predictor import Bilinear_Predictor
 from collineation import check_collineation
 from selectrect import is_convex_quadrangle 
+from idw_solver import Idw_Solver
 
 class Bilinear(Interp):
   
@@ -50,6 +51,8 @@ class Bilinear(Interp):
       # ignore masked pnt
       if self.dst_grid_imask[i] == 0:
         print 'My mask is zero!'
+        self.remap_matrix.append([])
+        self.remap_matrix_indx.append([])
         continue
       
       # debug recovery function
@@ -78,8 +81,18 @@ class Bilinear(Interp):
         self.remap_matrix_indx.append(indx)
         continue
       # find a bilinear box
-      outside_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
+      outside_flag, full_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
       
+      # can not find 4 cells with no masks
+      # use idw algorithm instead
+      if not full_flag:
+        bilinear_solver= Idw_Solver(dst_point, bilinear_box)
+        bilinear_solver.solve()
+        bilinear_box_indx = Interp.indx_recovery(self, bilinear_box_indx)
+        self.remap_matrix.append(bilinear_solver.wgt_lst)
+        self.remap_matrix_indx.append(bilinear_box_indx)
+        continue
+        
       # if can not be contained or bounding rect is a triangle
       # deciding a triangle by checking if three of them is collinearion
       if outside_flag or self.check_triangle(bilinear_box):
@@ -92,7 +105,7 @@ class Bilinear(Interp):
           if not is_convex_quadrangle(bilinear_box):
             print 'it is a non-convex quadrangle, so it must be outside.'
           else:
-            print 'trully meaning extrapolation.'   
+            print 'trully meaning extrapolation.' 
         else:
           print 'it is a bounding triangle box.'
       else:
@@ -111,11 +124,11 @@ class Bilinear(Interp):
       # transferm ghost bilinear_box_indx to original
       bilinear_box_indx = Interp.indx_recovery(self, bilinear_box_indx)
       
-      print ''
       print dst_point
       print bilinear_box
       print bilinear_box_indx
       print bilinear_solver.wgt_lst
+      print ''
 
       # store result into objs
       #self.interp_wgt = bilinear_solver.wgt_lst
@@ -125,12 +138,15 @@ class Bilinear(Interp):
       # set remap_matrix and remap_matrix_indx objs 
       self.remap_matrix.append(bilinear_solver.wgt_lst)
       self.remap_matrix_indx.append(bilinear_box_indx)
-       
+    
+    print 'remap_matrix size is:'
+    print len(self.remap_matrix)
+           
   #def remap(self): 
 
 if __name__ == '__main__':
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
-  test_obj = Bilinear('../../grid/POP43.nc', '../../grid/ll1deg_grid.nc')
+  test_obj = Bilinear('../../..//grid/POP43.nc', '../../../grid/ll1deg_grid.nc')
   #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/T42.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
   #test_obj = Bilinear('../../grid/T42.nc', '../../grid/ll1deg_grid.nc')
