@@ -44,3 +44,4 @@ if __name__ == '__main__':
   for i in range(n):
     gridfilename = path + grid_file_name_lst[i]
     modify_filter(gridfilename, ttlname_lst[i], indflag_lst[i])
+
