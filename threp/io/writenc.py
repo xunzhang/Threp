@@ -26,11 +26,11 @@ class Writenc(Exception):
     ncfile.createDimension('src_grid_size', self.obj.src_grid_size)
     ncfile.createDimension('dst_grid_size', self.obj.dst_grid_size)
     ncfile.createDimension('n_wgt', self.n_wgt)
-    ncfile.createDimension('src_rank', self.obj.src_rank)
-    ncfile.createDimension('dst_rank', self.obj.dst_rank)
+    ncfile.createDimension('src_rank', self.obj.src_grid_rank)
+    ncfile.createDimension('dst_rank', self.obj.dst_grid_rank)
     ncfile.createDimension('num_wgts', 1)
-    ncfile.createDimension('src_corners', self.obj.src_corners)
-    ncfile.createDimension('dst_corners', self.obj.dst_corners)
+    ncfile.createDimension('src_corners', self.obj.src_grid_corners)
+    ncfile.createDimension('dst_corners', self.obj.dst_grid_corners)
     
     # set variable info
     src_grid_dims_var = ncfile.createVariable('src_grid_dims', dtype('int32').char, ('src_grid_rank',))

@@ -31,7 +31,9 @@ class Interp(Exception):
     self.remap_matrix_compact = []
     self.remap_src_indx = []
     self.remap_dst_indx = []
-        
+    
+    self.src_data = []
+    
   # decide if all indx cells are masked out
   def check_all_masks(self, indx, n):
     checksum = 0
@@ -47,12 +49,15 @@ class Interp(Exception):
     tmp_indx = []
     for i in indx_lst:
       if i >= self.src_grid_size:
+        flag = True
         print 'recovery ghost index.'
         if (i / self.src_grid_dims[1]) == 1:
           offset = 0
         else:
           offset = self.src_grid_dims[0] - 1
         tmp_indx.append((i % self.src_grid_dims[1]) * self.src_grid_dims[0] + offset)
+      else:
+        tmp_indx.append(i)
     indx_lst = tmp_indx
     return indx_lst
       
@@ -60,9 +65,11 @@ class Interp(Exception):
   def interp(self):
     pass
     
-  # virtual function to remap data 
+  # virtual function to interpolate data 
   def remap(self):
-    pass
+    for i in range(len(self.remap_matrix_compact)):
+      dst_data[self.remap_dst_indx[i]] += self.remap_matrix_compact[i] * self.src_data[remap_src_indx[i]]
+    return dst_data
      
   def compact_remap_matrix(self):
     i = 0
@@ -72,6 +79,10 @@ class Interp(Exception):
         j = 0
         for wgt in matrix_item:
           self.remap_matrix_compact.append(wgt)
+          print self.remap_matrix[i]
+          print self.remap_matrix_indx[i]
+          print i
+          print j
           self.remap_src_indx.append(self.remap_matrix_indx[i][j])
           self.remap_dst_indx.append(k)
           j += 1
