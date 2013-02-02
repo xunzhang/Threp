@@ -36,7 +36,7 @@ imask = ncfile.variables['domain_l_mask'][:, :]
 tmp = []
 for i in range(ny):
   for j in range(nx):
-   tmp.append(int(imask[i][j]))
+   tmp.append(int(imask[i][j]) ^ 1)
 imask = scipy.array(tmp)
 
 # create dimensions

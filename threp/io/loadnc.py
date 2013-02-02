@@ -88,6 +88,18 @@ class Loadnc(Exception):
     variable_name = 'grid_imask'
     __grid_imask = self.ncfile.variables[variable_name][:]
     __grid_imask = __grid_imask.tolist()
+    
+    oc_num = 0
+    ld_num = 0
+    #for mask in __grid_imask:
+    #  if mask == 0:
+    #    oc_num += 1
+    #  else:
+    #    ld_num += 1
+    #print 'oc_num'
+    #print oc_num
+    #print 'ld_num'
+    #print ld_num
     return __grid_imask
   
   def __get_grid_corner_coords(self):

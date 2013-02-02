@@ -146,9 +146,11 @@ class Bilinear(Interp):
 
 if __name__ == '__main__':
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
-  test_obj = Bilinear('../../..//grid/POP43.nc', '../../../grid/ll1deg_grid.nc')
+  #test_obj = Bilinear('../../../grid/POP43.nc', '../../../grid/ll1deg_grid.nc')
   #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/T42.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
   #test_obj = Bilinear('../../grid/T42.nc', '../../grid/ll1deg_grid.nc')
+  test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc')
+  #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/POP43.nc', '../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc')
   test_obj.interp()
      
