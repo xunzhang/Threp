@@ -10,6 +10,7 @@ import threp_import
 from nearest import Search
 from interp import Interp
 from idw_solver import Idw_Solver
+from writenc import Writenc
 
 class Idw(Interp):
   
@@ -113,11 +114,20 @@ class Idw(Interp):
     print 'remap_matrix size is:'
     print len(self.remap_matrix)
 
+  def gen_remap_matrix_file(self):
+    filename = 'rmp_' + self.src_grid_name + '_' + self.dst_grid_name + '_inverse_distance_weighted'
+    write_handler = Write(filename, self, 'idw')
+    write_handler.write()
+  
+  def remap(self):
+   
 if __name__ == '__main__':
   #test_obj = Idw('../../grid/ll2.5deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
   #test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
   #test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
-  test_obj = Idw('../../../grid/POP43.nc', '../../../grid/ll1deg_grid.nc', 4)
+  #test_obj = Idw('../../../grid/POP43.nc', '../../../grid/ll1deg_grid.nc', 4)
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
   #test_obj = Idw('../../grid/T42.nc', '../../grid/POP43.nc', 4)
+  test_obj = Idw('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc')
   test_obj.interp()
+  test_obj.gen_remap_matrix_file()

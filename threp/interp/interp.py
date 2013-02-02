@@ -19,11 +19,18 @@ class Interp(Exception):
     self.stree_base_obj = Build(self.src_grid_size, self.src_grid_corners, self.src_grid_rank, self.src_grid_dims, self.src_grid_center_lat, self.src_grid_center_lon, self.src_grid_imask)
     self.stree = self.stree_base_obj.grow()
     
+    self.src_grid_name = src_grid_file_name.split('/')[-1]
+    self.dst_grid_name = dst_grid_file_name.split('/')[-1]
+     
     #self.interp_wgt = []
     #self.interp_box_indx = []
     #self.interp_box = []
     self.remap_matrix = []
     self.remap_matrix_indx = []
+    
+    self.remap_matrix_compact = []
+    self.remap_src_indx = []
+    self.remap_dst_indx = []
         
   # decide if all indx cells are masked out
   def check_all_masks(self, indx, n):
@@ -57,3 +64,17 @@ class Interp(Exception):
   def remap(self):
     pass
      
+  def compact_remap_matrix(self):
+    i = 0
+    k = 0
+    for matrix_item in self.remap_matrix:
+      if matrix_item:
+        j = 0
+        for wgt in matrix_item:
+          self.remap_matrix_compact.append(wgt)
+          self.remap_src_indx.append(self.remap_matrix_indx[i][j])
+          self.remap_dst_indx.append(k)
+          j += 1
+      k += 1
+      i += 1  
+    

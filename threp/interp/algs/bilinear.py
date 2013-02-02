@@ -13,6 +13,7 @@ from bilinear_predictor import Bilinear_Predictor
 from collineation import check_collineation
 from selectrect import is_convex_quadrangle 
 from idw_solver import Idw_Solver
+from writenc import Writenc
 
 class Bilinear(Interp):
   
@@ -39,7 +40,7 @@ class Bilinear(Interp):
       return 2
     else:
       return 1
-   
+  
   # interp process in Bilinear subclass.
   def interp(self):
     #print self.dst_grid_center_lon[0]
@@ -141,8 +142,18 @@ class Bilinear(Interp):
     
     print 'remap_matrix size is:'
     print len(self.remap_matrix)
-           
-  #def remap(self): 
+    
+    # compact remap matrix, gen remap_src_indx and remap_dst_indx
+    print 'Compacting remap matrix...'
+    Interp.compact_remap_matrix(self)
+    print 'Compacting finished!'
+            
+  def gen_remap_matrix_file(self):
+    filename = 'rmp_' + self.src_grid_name + '_' + self.dst_grid_name + '_bilinear' 
+    write_handler = Writenc(filename, self, 'bilinear')
+    write_handler.write() 
+     
+  def remap(self): 
 
 if __name__ == '__main__':
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
@@ -153,4 +164,5 @@ if __name__ == '__main__':
   test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc')
   #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/POP43.nc', '../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc')
   test_obj.interp()
-     
+  test_obj.gen_remap_matrix_file()
+  
