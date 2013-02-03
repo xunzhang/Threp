@@ -1,0 +1,148 @@
+<atm>
+float avXa2c_a_Sa_z(time, nj_a, ni_a) ;
+avXa2c_a_Sa_z:long_name = "height" ;
+avXa2c_a_Sa_z:units = "m" ;
+avXa2c_a_Sa_z:missing_value = 1.e+30f ;
+avXa2c_a_Sa_z:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_z:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_u(time, nj_a, ni_a) ;
+avXa2c_a_Sa_u:long_name = "velocity, zonal" ;
+avXa2c_a_Sa_u:units = "N/m^2" ;
+avXa2c_a_Sa_u:missing_value = 1.e+30f ;
+avXa2c_a_Sa_u:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_u:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_v(time, nj_a, ni_a) ;
+avXa2c_a_Sa_v:long_name = "velocity, meridional" ;
+avXa2c_a_Sa_v:units = "N/m^2" ;
+avXa2c_a_Sa_v:missing_value = 1.e+30f ;
+avXa2c_a_Sa_v:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_v:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_tbot(time, nj_a, ni_a) ;
+avXa2c_a_Sa_tbot:long_name = "temperature, bottom" ;
+avXa2c_a_Sa_tbot:units = "kelvin" ;
+avXa2c_a_Sa_tbot:missing_value = 1.e+30f ;
+avXa2c_a_Sa_tbot:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_tbot:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_ptem(time, nj_a, ni_a) ;
+avXa2c_a_Sa_ptem:long_name = "potential temperature" ;
+avXa2c_a_Sa_ptem:units = "kelvin" ;
+avXa2c_a_Sa_ptem:missing_value = 1.e+30f ;
+avXa2c_a_Sa_ptem:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_ptem:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_shum(time, nj_a, ni_a) ;
+avXa2c_a_Sa_shum:long_name = "humidity, specific" ;
+avXa2c_a_Sa_shum:units = "kg/kg" ;
+avXa2c_a_Sa_shum:missing_value = 1.e+30f ;
+avXa2c_a_Sa_shum:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_shum:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_dens(time, nj_a, ni_a) ;
+avXa2c_a_Sa_dens:long_name = "density" ;
+avXa2c_a_Sa_dens:units = "kg/m^3" ;
+avXa2c_a_Sa_dens:missing_value = 1.e+30f ;
+avXa2c_a_Sa_dens:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_dens:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_pbot(time, nj_a, ni_a) ;
+avXa2c_a_Sa_pbot:long_name = "pressure, bottom" ;
+avXa2c_a_Sa_pbot:units = "Pa" ;
+avXa2c_a_Sa_pbot:missing_value = 1.e+30f ;
+avXa2c_a_Sa_pbot:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_pbot:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_pslv(time, nj_a, ni_a) ;
+avXa2c_a_Sa_pslv:long_name = "pressure, sea level" ;
+avXa2c_a_Sa_pslv:units = "Pa" ;
+avXa2c_a_Sa_pslv:missing_value = 1.e+30f ;
+avXa2c_a_Sa_pslv:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_pslv:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_co2prog(time, nj_a, ni_a) ;
+avXa2c_a_Sa_co2prog:long_name = "undefined" ;
+avXa2c_a_Sa_co2prog:units = "undefined" ;
+avXa2c_a_Sa_co2prog:missing_value = 1.e+30f ;
+avXa2c_a_Sa_co2prog:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_co2prog:cell_method = "time: mean" ;
+
+float avXa2c_a_Sa_co2diag(time, nj_a, ni_a) ;
+avXa2c_a_Sa_co2diag:long_name = "undefined" ;
+avXa2c_a_Sa_co2diag:units = "undefined" ;
+avXa2c_a_Sa_co2diag:missing_value = 1.e+30f ;
+avXa2c_a_Sa_co2diag:_FillValue = 1.e+30f ;
+avXa2c_a_Sa_co2diag:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_lwdn(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_lwdn:long_name = "longwave radiation, downward" ;
+avXa2c_a_Faxa_lwdn:units = "W/m^2" ;
+avXa2c_a_Faxa_lwdn:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_lwdn:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_lwdn:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_rainc(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_rainc:long_name = "precip, liquid, convective" ;
+avXa2c_a_Faxa_rainc:units = "kg/s/m^2" ;
+avXa2c_a_Faxa_rainc:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_rainc:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_rainc:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_rainl(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_rainl:long_name = "precip, liquid, large-scale" ;
+avXa2c_a_Faxa_rainl:units = "kg/s/m^2" ;
+avXa2c_a_Faxa_rainl:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_rainl:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_rainl:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_snowc(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_snowc:long_name = "precip, frozen, convective" ;
+avXa2c_a_Faxa_snowc:units = "kg/s/m^2" ;
+avXa2c_a_Faxa_snowc:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_snowc:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_snowc:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_snowl(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_snowl:long_name = "precip, frozen, large-scale" ;
+avXa2c_a_Faxa_snowl:units = "kg/s/m^2" ;
+avXa2c_a_Faxa_snowl:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_snowl:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_snowl:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_swndr(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_swndr:long_name = "rad, sw, near-infr, direct" ;
+avXa2c_a_Faxa_swndr:units = "W/m^2" ;
+avXa2c_a_Faxa_swndr:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_swndr:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_swndr:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_swvdr(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_swvdr:long_name = "rad, sw, visible, direct" ;
+avXa2c_a_Faxa_swvdr:units = "W/m^2" ;
+avXa2c_a_Faxa_swvdr:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_swvdr:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_swvdr:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_swndf(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_swndf:long_name = "rad, sw, near-infr, diffuse" ;
+avXa2c_a_Faxa_swndf:units = "W/m^2" ;
+avXa2c_a_Faxa_swndf:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_swndf:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_swndf:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_swvdf(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_swvdf:long_name = "rad, sw, visible, diffuse" ;
+avXa2c_a_Faxa_swvdf:units = "W/m^2" ;
+avXa2c_a_Faxa_swvdf:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_swvdf:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_swvdf:cell_method = "time: mean" ;
+
+float avXa2c_a_Faxa_swnet(time, nj_a, ni_a) ;
+avXa2c_a_Faxa_swnet:long_name = "rad, sw, net" ;
+avXa2c_a_Faxa_swnet:units = "W/m^2" ;
+avXa2c_a_Faxa_swnet:missing_value = 1.e+30f ;
+avXa2c_a_Faxa_swnet:_FillValue = 1.e+30f ;
+avXa2c_a_Faxa_swnet:cell_method = "time: mean" ;
+</atm>
