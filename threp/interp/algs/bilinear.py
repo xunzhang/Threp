@@ -87,7 +87,7 @@ class Bilinear(Interp):
       # can not find 4 cells with no masks
       # use idw algorithm instead
       if not full_flag:
-        bilinear_solver= Idw_Solver(dst_point, bilinear_box)
+        bilinear_solver = Idw_Solver(dst_point, bilinear_box, 1.0e-6, 1)
         bilinear_solver.solve()
         bilinear_box_indx = Interp.indx_recovery(self, bilinear_box_indx)
         self.remap_matrix.append(bilinear_solver.wgt_lst)
@@ -154,6 +154,7 @@ class Bilinear(Interp):
     write_handler.write() 
      
   def remap(self): 
+    pass
 
 if __name__ == '__main__':
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')

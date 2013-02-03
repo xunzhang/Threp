@@ -93,8 +93,11 @@ class Idw(Interp):
         # solve normal case
         idw_solver.solve()
       
+      print 'ss'
+      print neighbor_indx 
       # transform ghost indx to original
       neighbor_indx = Interp.indx_recovery(self, neighbor_indx)
+      print neighbor_indx 
       
       print ''
       print dst_point
@@ -110,16 +113,26 @@ class Idw(Interp):
       # set remap_matrix and remap_matrix_indx objs
       self.remap_matrix.append(idw_solver.wgt_lst)
       self.remap_matrix_indx.append(neighbor_indx)
+      if len(idw_solver.wgt_lst) != len(neighbor_indx):
+        print idw_solver.wgt_lst
+        print neighbor_indx
+        print 'ERRORRRR'
+        sys.exit()
 
     print 'remap_matrix size is:'
     print len(self.remap_matrix)
+   
+    # compact remap matrix, gen remap_src_indx and remap_dst_indx
+    print 'Compacting remap matrix...'
+    Interp.compact_remap_matrix(self)
+    print 'Compacting finished!'
 
   def gen_remap_matrix_file(self):
-    filename = 'rmp_' + self.src_grid_name + '_' + self.dst_grid_name + '_inverse_distance_weighted'
-    write_handler = Write(filename, self, 'idw')
+    filename = 'rmp_' + self.src_grid_name + '_' + self.dst_grid_name + '_idw.nc'
+    write_handler = Writenc(filename, self, 'idw')
     write_handler.write()
   
-  def remap(self):
+  #def remap(self):
    
 if __name__ == '__main__':
   #test_obj = Idw('../../grid/ll2.5deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
@@ -128,6 +141,6 @@ if __name__ == '__main__':
   #test_obj = Idw('../../../grid/POP43.nc', '../../../grid/ll1deg_grid.nc', 4)
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
   #test_obj = Idw('../../grid/T42.nc', '../../grid/POP43.nc', 4)
-  test_obj = Idw('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc')
+  test_obj = Idw('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', 4)
   test_obj.interp()
   test_obj.gen_remap_matrix_file()

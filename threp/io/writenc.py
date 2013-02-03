@@ -8,6 +8,7 @@ __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 import sys
 import time
 import scipy
+from numpy import dtype
 from Scientific.IO.NetCDF import NetCDFFile as Dataset 
 
 class Writenc(Exception):
@@ -26,11 +27,11 @@ class Writenc(Exception):
     ncfile.createDimension('src_grid_size', self.obj.src_grid_size)
     ncfile.createDimension('dst_grid_size', self.obj.dst_grid_size)
     ncfile.createDimension('n_wgt', self.n_wgt)
-    ncfile.createDimension('src_rank', self.obj.src_grid_rank)
-    ncfile.createDimension('dst_rank', self.obj.dst_grid_rank)
+    ncfile.createDimension('src_grid_rank', self.obj.src_grid_rank)
+    ncfile.createDimension('dst_grid_rank', self.obj.dst_grid_rank)
     ncfile.createDimension('num_wgts', 1)
-    ncfile.createDimension('src_corners', self.obj.src_grid_corners)
-    ncfile.createDimension('dst_corners', self.obj.dst_grid_corners)
+    ncfile.createDimension('src_grid_corners', self.obj.src_grid_corners)
+    ncfile.createDimension('dst_grid_corners', self.obj.dst_grid_corners)
     
     # set variable info
     src_grid_dims_var = ncfile.createVariable('src_grid_dims', dtype('int32').char, ('src_grid_rank',))
@@ -47,11 +48,12 @@ class Writenc(Exception):
     
     src_grid_dims_var[:] = self.obj.src_grid_dims
     dst_grid_dims_var[:] = self.obj.dst_grid_dims
-    src_grid_center_lat_var[:] = scipy.array(self.obj.src_grid_center_lat)
-    src_grid_center_lon_var[:] = scipy.array(self.obj.src_grid_center_lon)
+    print len(self.obj.original_src_grid_center_lat)
+    src_grid_center_lat_var[:] = scipy.array(self.obj.original_src_grid_center_lat)
+    src_grid_center_lon_var[:] = scipy.array(self.obj.original_src_grid_center_lon)
     dst_grid_center_lat_var[:] = scipy.array(self.obj.dst_grid_center_lat)
     dst_grid_center_lon_var[:] = scipy.array(self.obj.dst_grid_center_lon)
-    src_grid_imask_var[:] = scipy.array(self.obj.src_grid_imask)
+    src_grid_imask_var[:] = scipy.array(self.obj.original_src_grid_imask)
     dst_grid_imask_var[:] = scipy.array(self.obj.dst_grid_imask)
     remap_src_indx_var[:] = scipy.array(self.obj.remap_src_indx)
     remap_dst_indx_var[:] = scipy.array(self.obj.remap_dst_indx)
