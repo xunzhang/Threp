@@ -2,6 +2,7 @@
 # Filename: interp.py
 
 import copy
+import sys
 import threp_import
 from loadnc import Loadnc
 from loadreal import Loadreal
