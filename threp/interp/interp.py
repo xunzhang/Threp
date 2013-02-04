@@ -104,6 +104,6 @@ class Interp(Exception):
       self.dst_data.append(0.0)
     # interpolate    
     for i in range(len(self.remap_matrix_compact)):
-      self.dst_data[self.remap_dst_indx[i]] += self.remap_matrix_compact[i] * self.src_data[remap_src_indx[i]]
+      self.dst_data[self.remap_dst_indx[i]] += self.remap_matrix_compact[i] * self.src_data[self.remap_src_indx[i]]
     return self.dst_data
 
