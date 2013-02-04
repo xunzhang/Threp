@@ -82,12 +82,6 @@ class Interp(Exception):
   # virtual function to do calc wgts  
   def interp(self):
     pass
-    
-  # virtual function to interpolate data 
-  def remap(self):
-    for i in range(len(self.remap_matrix_compact)):
-      self.dst_data[self.remap_dst_indx[i]] += self.remap_matrix_compact[i] * self.src_data[remap_src_indx[i]]
-    return dst_data
      
   def compact_remap_matrix(self):
     i = 0
@@ -103,3 +97,13 @@ class Interp(Exception):
       k += 1
       i += 1  
     
+  # virtual function to interpolate data 
+  def remap(self):
+    # init dst_data list as 0.0
+    for i in range(max(self.remap_dst_indx) + 1):
+      self.dst_data.append(0.0)
+    # interpolate    
+    for i in range(len(self.remap_matrix_compact)):
+      self.dst_data[self.remap_dst_indx[i]] += self.remap_matrix_compact[i] * self.src_data[remap_src_indx[i]]
+    return self.dst_data
+

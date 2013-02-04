@@ -132,7 +132,9 @@ class Idw(Interp):
     write_handler = Writenc(filename, self, 'idw')
     write_handler.write()
   
-  #def remap(self):
+  def remap(self):
+    remap_result = Interp.remap(self)
+    return remap_result
    
 if __name__ == '__main__':
   #test_obj = Idw('../../grid/ll2.5deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
@@ -144,3 +146,6 @@ if __name__ == '__main__':
   test_obj = Idw('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', 4)
   test_obj.interp()
   test_obj.gen_remap_matrix_file()
+  remap_result = test_obj.remap()
+  print remap_result
+   

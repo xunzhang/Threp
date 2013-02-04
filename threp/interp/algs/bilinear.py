@@ -154,7 +154,8 @@ class Bilinear(Interp):
     write_handler.write() 
      
   def remap(self): 
-    pass
+    Interp.remap(self) 
+    return remap_result
 
 if __name__ == '__main__':
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
@@ -166,4 +167,6 @@ if __name__ == '__main__':
   #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/POP43.nc', '../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc')
   test_obj.interp()
   test_obj.gen_remap_matrix_file()
-  
+  remap_result = test_obj.remap()
+  print remap_result 
+   
