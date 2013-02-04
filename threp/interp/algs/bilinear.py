@@ -154,7 +154,7 @@ class Bilinear(Interp):
     write_handler.write() 
      
   def remap(self): 
-    Interp.remap(self) 
+    remap_result = Interp.remap(self) 
     return remap_result
 
 if __name__ == '__main__':
