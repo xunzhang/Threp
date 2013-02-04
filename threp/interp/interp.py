@@ -4,11 +4,12 @@
 import copy
 import threp_import
 from loadnc import Loadnc
+from loadreal import Loadreal
 from build import Build
 
 class Interp(Exception):
   
-  def __init__(self, src_grid_file_name, dst_grid_file_name):
+  def __init__(self, src_grid_file_name, dst_grid_file_name, online_flag, src_realdata_file_name):
     src_nc_obj = Loadnc(src_grid_file_name)
     self.src_grid_size, self.src_grid_corners, self.src_grid_rank, self.src_grid_dims, self.src_grid_center_lat, self.src_grid_center_lon, self.src_grid_imask = src_nc_obj.load()
     src_nc_obj.closenc()
@@ -39,8 +40,18 @@ class Interp(Exception):
     self.remap_src_indx = []
     self.remap_dst_indx = []
     
-    self.src_data = []
+    # load real data if online remapping
+    # self.src_data = []
+    if online_flag:
+      src_data_nc_obj = Loadreal(src_realdata_file_name)
+      size, self.src_data = src_data_nc_obj.load()
+      if size != self.src_grid_size:
+        print 'Real data size does not match grid size.'
+        sys.exit()
+      src_data_nc_obj.closenc()
     
+    self.dst_data = [] 
+   
   # decide if all indx cells are masked out
   def check_all_masks(self, indx, n):
     checksum = 0
@@ -75,7 +86,7 @@ class Interp(Exception):
   # virtual function to interpolate data 
   def remap(self):
     for i in range(len(self.remap_matrix_compact)):
-      dst_data[self.remap_dst_indx[i]] += self.remap_matrix_compact[i] * self.src_data[remap_src_indx[i]]
+      self.dst_data[self.remap_dst_indx[i]] += self.remap_matrix_compact[i] * self.src_data[remap_src_indx[i]]
     return dst_data
      
   def compact_remap_matrix(self):

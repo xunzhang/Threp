@@ -17,8 +17,8 @@ from writenc import Writenc
 
 class Bilinear(Interp):
   
-  def __init__(self, src_grid_file_name, dst_grid_file_name):
-    Interp.__init__(self, src_grid_file_name, dst_grid_file_name) 
+  def __init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name):
+    Interp.__init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name) 
     self.bilinearbox_obj = Bilinearbox(self.stree_base_obj, self.stree)
   
   def check_triangle(self, box):
@@ -162,7 +162,7 @@ if __name__ == '__main__':
   #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/T42.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
   #test_obj = Bilinear('../../grid/T42.nc', '../../grid/ll1deg_grid.nc')
-  test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc')
+  test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
   #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/POP43.nc', '../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc')
   test_obj.interp()
   test_obj.gen_remap_matrix_file()

@@ -16,8 +16,8 @@ class Idw(Interp):
   
   # init Idw object.
   # init self.eps to avoid deviding by zero, init the search object self.idw_obj
-  def __init__(self, src_grid_file_name, dst_grid_file_name, k):
-    Interp.__init__(self, src_grid_file_name, dst_grid_file_name)
+  def __init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name, k):
+    Interp.__init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name)
     self.power = 1
     self.eps = 1.0e-6
     self.nearest_k = k
@@ -141,6 +141,6 @@ if __name__ == '__main__':
   #test_obj = Idw('../../../grid/POP43.nc', '../../../grid/ll1deg_grid.nc', 4)
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
   #test_obj = Idw('../../grid/T42.nc', '../../grid/POP43.nc', 4)
-  test_obj = Idw('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', 4)
+  test_obj = Idw('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', 4)
   test_obj.interp()
   test_obj.gen_remap_matrix_file()
