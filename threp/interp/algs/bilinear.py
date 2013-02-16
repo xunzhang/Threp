@@ -149,7 +149,7 @@ class Bilinear(Interp):
     print 'Compacting finished!'
             
   def gen_remap_matrix_file(self):
-    filename = 'rmp_' + self.src_grid_name + '_' + self.dst_grid_name + '_bilinear' 
+    filename = 'rmp_' + self.src_grid_name + '_' + self.dst_grid_name + '_bilinear.nc' 
     write_handler = Writenc(filename, self, 'bilinear')
     write_handler.write() 
      

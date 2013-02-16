@@ -101,6 +101,7 @@ class Interp(Exception):
   # virtual function to interpolate data 
   def remap(self):
     # init dst_data list as 0.0
+    print max(self.remap_dst_indx)
     for i in range(max(self.remap_dst_indx) + 1):
       self.dst_data.append(0.0)
     # interpolate    
