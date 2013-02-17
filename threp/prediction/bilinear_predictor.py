@@ -37,11 +37,12 @@ class Bilinear_Predictor(Predictor):
     return row1_str + ';' + row2_str + ';' + row3_str + ';' + row4_str 
     
   def predict(self):
+    print self.dst_point
     dst_pnt_vec = np.matrix('1 ' + str(self.dst_point[0]) + ' ' + str(self.dst_point[1]) + ' ' + str(self.dst_point[0] * self.dst_point[1]))
     print self.A
     if np.rank(self.A) != 4:
       print 'not full rank.'
-      inv_A = np.linalg.pinv(self.A)
+      inv_A = np.linalg.pinv(self.A, 0.0001)
     else:
       print 'full rank.'
       inv_A = np.linalg.inv(self.A)

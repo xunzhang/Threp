@@ -52,7 +52,23 @@ class Interp(Exception):
       src_data_nc_obj.closenc()
     
     self.dst_data = [] 
-   
+  
+  def check_wgt(self, wgt):
+    for item in wgt:
+      if item > 2 or item < -2:
+        print item
+        print 'wgt is invalid'
+        sys.exit()
+  
+  def check_wgtsum(self, wgt):
+    lsum = 0.0
+    for item in wgt:
+      lsum += item
+    if abs(lsum - 1.0) > 1:
+      print lsum
+      print 'sum of local wgts is invalid'
+      sys.exit()
+  
   # decide if all indx cells are masked out
   def check_all_masks(self, indx, n):
     checksum = 0

@@ -2,6 +2,7 @@
 # Filename: bilinear.py
 
 ''''''
+import sys
 
 __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
@@ -76,6 +77,9 @@ class Bilinear(Interp):
             local_wgt.append(1.0)
           else:
             local_wgt.append(0.0)
+        
+        Interp.check_wgt(self, local_wgt)
+        Interp.check_wgtsum(self, local_wgt)
         # set remap_matrix and remap_matrix_indx objs
         self.remap_matrix.append(local_wgt)
         indx = Interp.indx_recovery(self, indx)
@@ -90,6 +94,8 @@ class Bilinear(Interp):
         bilinear_solver = Idw_Solver(dst_point, bilinear_box, 1.0e-6, 1)
         bilinear_solver.solve()
         bilinear_box_indx = Interp.indx_recovery(self, bilinear_box_indx)
+        Interp.check_wgt(self, bilinear_solver.wgt_lst)
+        Interp.check_wgtsum(self, bilinear_solver.wgt_lst)
         self.remap_matrix.append(bilinear_solver.wgt_lst)
         self.remap_matrix_indx.append(bilinear_box_indx)
         continue
@@ -135,7 +141,9 @@ class Bilinear(Interp):
       #self.interp_wgt = bilinear_solver.wgt_lst
       #self.interp_box_indx = bilinear_box_indx
       #self.interp_box = bilinear_box
-       
+      
+      Interp.check_wgt(self, bilinear_solver.wgt_lst) 
+      Interp.check_wgtsum(self, bilinear_solver.wgt_lst) 
       # set remap_matrix and remap_matrix_indx objs 
       self.remap_matrix.append(bilinear_solver.wgt_lst)
       self.remap_matrix_indx.append(bilinear_box_indx)
@@ -163,10 +171,11 @@ if __name__ == '__main__':
   #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/T42.nc')
   #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
   #test_obj = Bilinear('../../grid/T42.nc', '../../grid/ll1deg_grid.nc')
-  test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
-  #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/POP43.nc', '../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc')
+  test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
+  #test_obj = Bilinear('../../../grid/T42_Gaussian.nc', '../../../grid/gx1v1.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
+  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc')
   test_obj.interp()
   test_obj.gen_remap_matrix_file()
-  remap_result = test_obj.remap()
-  print remap_result 
+  #remap_result = test_obj.remap()
+  #print remap_result 
    
