@@ -44,7 +44,7 @@ if __name__ == '__main__':
   for i in range(len(remap_matrix_compact)):
     lat = src_coords_lat[remap_src_indx[i]] * math.pi / 180
     lon = src_coords_lon[remap_src_indx[i]] * math.pi / 180
-    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func1(lat, lon)
+    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func3(lat, lon)
     #print remap_dst_indx[i]
     #print remap_matrix_compact[i]
     #print test_func1(lat, lon)
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     if item:
       lat = dst_coords_lat[i] * math.pi / 180
       lon = dst_coords_lon[i] * math.pi / 180
-      real = test_func1(lat, lon)
+      real = test_func3(lat, lon)
       r_err = abs(real - item) / real
       if r_err < 1:
         print dst_coords_lat[i] 
