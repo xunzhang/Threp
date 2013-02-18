@@ -64,7 +64,7 @@ class Interp(Exception):
     lsum = 0.0
     for item in wgt:
       lsum += item
-    if abs(lsum - 1.0) > 1:
+    if abs(lsum - 1.0) > 0.2:
       print lsum
       print 'sum of local wgts is invalid'
       sys.exit()
