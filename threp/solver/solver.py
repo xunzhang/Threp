@@ -34,10 +34,10 @@ class Solver(Exception):
     return r1, r2
 
   def select_legal_root(self, root1, root2):
-    if root1 >= 0 and root1 <= 1:
+    if root1 >= -1e-10 and root1 <= 1:
       print 'root1 is legal.'
       r = root1
-    if root2 >= 0 and root2 <= 1:
+    if root2 >= -1e-10 and root2 <= 1:
       print 'root2 is legal.'
       r = root2
     print root1
