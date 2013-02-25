@@ -44,6 +44,9 @@ class Bilinear_Predictor(Predictor):
     if np.rank(self.A) != 4:
       flag = True
       print 'not full rank.'
+      #if np.rank(self.A) != 2:
+      #  print 'rank is', np.rank(self.A)
+      #  sys.exit()
       inv_A = np.linalg.pinv(self.A, 0.0001)
     else:
       print 'full rank.'

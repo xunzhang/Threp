@@ -55,7 +55,7 @@ class Interp(Exception):
   
   def check_wgt(self, wgt):
     for item in wgt:
-      if item > 2 or item < -2:
+      if item > 5 or item < -5:
         print item
         print 'wgt is invalid'
         sys.exit()

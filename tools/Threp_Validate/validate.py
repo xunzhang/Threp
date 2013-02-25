@@ -32,8 +32,9 @@ def load_rmpwfile(fname):
   return src_coord_lat, src_coord_lon, dst_coord_lat, dst_coord_lon, remap_src_indx, remap_dst_indx, remap_matrix_compact
 
 if __name__ == '__main__':
+  filename = 'rmp_POP43_T42_Gaussian_bilinear.nc'
   #filename = 'rmp_T42_Gaussian_POP43_idw.nc' 
-  filename = 'rmp_T42_Gaussian_Gamil_128x60_Grid_bilinear.nc' 
+  #filename = 'rmp_T42_Gaussian_Gamil_128x60_Grid_bilinear.nc' 
   #filename = 'rmp_T42_Gaussian_mask_POP43_idw.nc' 
   #filename = 'rmp_T42_Gaussian_mask_POP43_bilinear.nc' 
   #filename = 'rmp_T42_Gaussian_POP43_bilinear.nc' 
@@ -45,7 +46,7 @@ if __name__ == '__main__':
   for i in range(len(remap_matrix_compact)):
     lat = src_coords_lat[remap_src_indx[i]] * math.pi / 180
     lon = src_coords_lon[remap_src_indx[i]] * math.pi / 180
-    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func1(lat, lon)
+    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func2(lat, lon)
     #print remap_dst_indx[i]
     #print remap_matrix_compact[i]
     #print test_func1(lat, lon)
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     if item:
       lat = dst_coords_lat[i] * math.pi / 180
       lon = dst_coords_lon[i] * math.pi / 180
-      real = test_func1(lat, lon)
+      real = test_func2(lat, lon)
       r_err = abs(real - item) / real
       if r_err < 1:
         print dst_coords_lat[i] 
