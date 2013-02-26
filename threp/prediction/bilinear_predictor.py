@@ -51,9 +51,9 @@ class Bilinear_Predictor(Predictor):
       inv_A = np.linalg.pinv(self.A, 0.0001)
     else:
       print 'full rank.'
-      inv_A = np.linalg.inv(self.A)
+      inv_A = np.linalg.pinv(self.A, 0.0001)
     wgt = dst_pnt_vec * inv_A
     self.wgt_lst = wgt.tolist()[0]
-    if flag:
-      self.wgt_lst = [item / sum(self.wgt_lst) for item in self.wgt_lst]
+    #if flag:
+    self.wgt_lst = [item / sum(self.wgt_lst) for item in self.wgt_lst]
     print self.wgt_lst 
