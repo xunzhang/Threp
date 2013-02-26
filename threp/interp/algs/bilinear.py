@@ -100,9 +100,11 @@ class Bilinear(Interp):
         self.remap_matrix_indx.append(bilinear_box_indx)
         continue
         
+      predict_flag = False
       # if can not be contained or bounding rect is a triangle
       # deciding a triangle by checking if three of them is collinearion
       if outside_flag or self.check_triangle(bilinear_box):
+        predict_flag = True
         print 'predictor case.'
         bilinear_solver = Bilinear_Predictor(dst_point, bilinear_box)
         bilinear_solver.predict() 
@@ -142,7 +144,8 @@ class Bilinear(Interp):
       #self.interp_box_indx = bilinear_box_indx
       #self.interp_box = bilinear_box
       
-      Interp.check_wgt(self, bilinear_solver.wgt_lst) 
+      if not predict_flag:
+        Interp.check_wgt(self, bilinear_solver.wgt_lst) 
       Interp.check_wgtsum(self, bilinear_solver.wgt_lst) 
       # set remap_matrix and remap_matrix_indx objs 
       self.remap_matrix.append(bilinear_solver.wgt_lst)

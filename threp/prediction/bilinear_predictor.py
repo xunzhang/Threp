@@ -41,7 +41,8 @@ class Bilinear_Predictor(Predictor):
     dst_pnt_vec = np.matrix('1 ' + str(self.dst_point[0]) + ' ' + str(self.dst_point[1]) + ' ' + str(self.dst_point[0] * self.dst_point[1]))
     print self.A
     flag = False
-    if np.rank(self.A) != 4:
+    if np.linalg.matrix_rank(self.A) != 4:
+    #if np.rank(self.A) != 4:
       flag = True
       print 'not full rank.'
       #if np.rank(self.A) != 2:
