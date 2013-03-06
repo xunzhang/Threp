@@ -11,6 +11,7 @@ from nearest import Search
 from interp import Interp
 from idw_solver import Idw_Solver
 from writenc import Writenc
+from mpi4py import MPI
 
 class Idw(Interp):
   
@@ -123,9 +124,9 @@ class Idw(Interp):
     print len(self.remap_matrix)
    
     # compact remap matrix, gen remap_src_indx and remap_dst_indx
-    print 'Compacting remap matrix...'
-    Interp.compact_remap_matrix(self)
-    print 'Compacting finished!'
+    #print 'Compacting remap matrix...'
+    #Interp.compact_remap_matrix(self)
+    #print 'Compacting finished!'
 
   def gen_remap_matrix_file(self):
     filename = 'rmp_' + self.src_grid_name + '_' + self.dst_grid_name + '_idw.nc'
@@ -137,6 +138,9 @@ class Idw(Interp):
     return remap_result
    
 if __name__ == '__main__':
+  comm = MPI.COMM_WORLD
+  size = comm.Get_size()
+  rank = comm.Get_rank()
   #test_obj = Idw('../../grid/ll2.5deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
   #test_obj = Idw('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc', 4)
   #test_obj = Idw('../../grid/T42.nc', '../../grid/ll1deg_grid.nc', 4)
@@ -146,8 +150,14 @@ if __name__ == '__main__':
   #test_obj = Idw('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', 4)
   #test_obj = Idw('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', 4)
   test_obj = Idw('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', 4)
+  test_obj.dst_distribute(rank, size)
   test_obj.interp()
-  test_obj.gen_remap_matrix_file()
-  remap_result = test_obj.remap()
-  print remap_result
+  if rank == 0:
+    # compact remap matrix, gen remap_src_indx and remap_dst_indx
+    print 'Compacting remap matrix...'
+    Interp.compact_remap_matrix(test_obj)
+    print 'Compacting finished!'
+    test_obj.gen_remap_matrix_file()
+    remap_result = test_obj.remap()
+    print remap_result
    
