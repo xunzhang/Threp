@@ -94,7 +94,6 @@ class Idw(Interp):
         # solve normal case
         idw_solver.solve()
       
-      print 'ss'
       print neighbor_indx 
       # transform ghost indx to original
       neighbor_indx = Interp.indx_recovery(self, neighbor_indx)
@@ -152,6 +151,8 @@ if __name__ == '__main__':
   test_obj = Idw('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', 4)
   test_obj.dst_distribute(rank, size)
   test_obj.interp()
+  # for mpi use
+  test_obj.dst_merge(rank, comm)
   if rank == 0:
     # compact remap matrix, gen remap_src_indx and remap_dst_indx
     print 'Compacting remap matrix...'
