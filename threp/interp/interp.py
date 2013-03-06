@@ -53,6 +53,41 @@ class Interp(Exception):
     
     self.dst_data = [] 
   
+  # for mpi use
+  def dst_distribute(self, rank, size):
+    # load balance, grid size reps load
+    load_sum = self.dst_grid_size
+    load = load_sum / size
+    if load_sum % size:
+      if rank == size - 1:
+        load = load_sum - load * (size - 1)
+    # dst_grid_dims dst_grid_size is changed in mpi case, but no place using it, so let it be..
+    # self.dst_grid_dims = self.dst_grid_dims
+    # self.dst_grid_size = load
+    start_indx = (load_sum / size) * rank
+    self.dst_grid_center_lat = self.dst_grid_center_lat[start_indx : start_indx + load] 
+    self.dst_grid_center_lon = self.dst_grid_center_lon[start_indx : start_indx + load]
+    self.dst_grid_imask = self.dst_grid_imask[start_indx : start_indx + load] 
+  
+  # for mpi use
+  def dst_merge(self, rank, comm):
+    self.remap_matrix = comm.gather(self.remap_matrix, root = 0)
+    self.remap_matrix_indx = comm.gather(self.remap_matrix_indx, root = 0)
+    self.dst_grid_center_lat = comm.gather(self.dst_grid_center_lat, root = 0)
+    self.dst_grid_center_lon = comm.gather(self.dst_grid_center_lon, root = 0)
+    self.dst_grid_imask = comm.gather(self.dst_grid_imask, root = 0)
+    if rank == 0:
+      self.remap_matrix = [val for item in self.remap_matrix for val in item] 
+      self.remap_matrix_indx = [val for item in self.remap_matrix_indx for val in item]
+      self.dst_grid_center_lat = [val for item in self.dst_grid_center_lat for val in item]
+      self.dst_grid_center_lon = [val for item in self.dst_grid_center_lon for val in item]
+      self.dst_grid_imask = [val for item in self.dst_grid_imask for val in item]
+    if rank == 1:
+      print self.remap_matrix[0]
+      print self.remap_matrix[1]
+      print self.remap_matrix[2]
+      print self.remap_matrix[3]
+      sys.exit() 
   def check_wgt(self, wgt):
     for item in wgt:
       if item > 2 or item < -2:

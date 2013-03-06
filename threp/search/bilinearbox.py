@@ -6,7 +6,7 @@
 __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
 import sys
-from matplotlib.path import Path
+#from matplotlib.path import Path
 from nearest import Search
 from selectrect import select_containing_rect
 from clockwise_sort import clockwise_sort

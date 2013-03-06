@@ -4,8 +4,8 @@
 
 import sys
 import numpy as np
-from heapq import heappush, heappop
-import scipy.sparse
+#from heapq import heappush, heappop
+#import scipy.sparse
 
 __all__ = ['minkowski_distance_p', 'minkowski_distance',
            'distance_matrix',
@@ -249,7 +249,8 @@ class KDTree(object):
                     self.__build(idx[less_idx],lessmaxes,mins),
                     self.__build(idx[greater_idx],maxes,greatermins))
 
-    def __query(self, x, k=1, eps=0, p=2, distance_upper_bound=np.inf):
+    #def __query(self, x, k=1, eps=0, p=2, distance_upper_bound=np.inf):
+    def __query(self, x, k=1, eps=0, p=2, distance_upper_bound=-10000):
 
         side_distances = np.maximum(0,np.maximum(x-self.maxes,self.mins-x))
         if p!=np.inf:
@@ -331,7 +332,8 @@ class KDTree(object):
         else:
             return sorted([((-d)**(1./p),i) for (d,i) in neighbors])
 
-    def query(self, x, k=1, eps=0, p=2, distance_upper_bound=np.inf):
+    #def query(self, x, k=1, eps=0, p=2, distance_upper_bound=np.inf):
+    def query(self, x, k=1, eps=0, p=2, distance_upper_bound=-10000):
         """
         Query the kd-tree for nearest neighbors
 

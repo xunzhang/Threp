@@ -34,9 +34,9 @@ def load_rmpwfile(fname):
 if __name__ == '__main__':
   #filename = 'rmp_POP43_T42_Gaussian_idw.nc'
   #filename = 'rmp_POP43_T42_Gaussian_bilinear.nc'
-  filename = 'rmp_POP43_T42_Gaussian_bilinear_old.nc'
+  #filename = 'rmp_POP43_T42_Gaussian_bilinear_old.nc'
   #filename = 'rmp_T42_Gaussian_POP43_idw.nc' 
-  #filename = 'rmp_T42_Gaussian_Gamil_128x60_Grid_bilinear.nc' 
+  filename = 'rmp_T42_Gaussian_Gamil_128x60_Grid_bilinear.nc' 
   #filename = 'rmp_T42_Gaussian_mask_POP43_idw.nc' 
   #filename = 'rmp_T42_Gaussian_mask_POP43_bilinear.nc' 
   #filename = 'rmp_T42_Gaussian_POP43_bilinear.nc' 

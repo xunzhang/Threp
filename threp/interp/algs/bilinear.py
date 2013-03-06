@@ -15,6 +15,7 @@ from collineation import check_collineation
 from selectrect import is_convex_quadrangle 
 from idw_solver import Idw_Solver
 from writenc import Writenc
+from mpi4py import MPI
 
 class Bilinear(Interp):
   
@@ -44,8 +45,6 @@ class Bilinear(Interp):
   
   # interp process in Bilinear subclass.
   def interp(self):
-    #print self.dst_grid_center_lon[0]
-    #print self.dst_grid_center_lat[0]
     #point = (self.dst_grid_center_lon[0], self.dst_grid_center_lat[0])
     #point = (0.0, 0.0)
     n = len(self.dst_grid_center_lon)
@@ -155,9 +154,9 @@ class Bilinear(Interp):
     print len(self.remap_matrix)
     
     # compact remap matrix, gen remap_src_indx and remap_dst_indx
-    print 'Compacting remap matrix...'
-    Interp.compact_remap_matrix(self)
-    print 'Compacting finished!'
+    #print 'Compacting remap matrix...'
+    #Interp.compact_remap_matrix(self)
+    #print 'Compacting finished!'
             
   def gen_remap_matrix_file(self):
     filename = 'rmp_' + self.src_grid_name + '_' + self.dst_grid_name + '_bilinear.nc' 
@@ -169,19 +168,30 @@ class Bilinear(Interp):
     return remap_result
 
 if __name__ == '__main__':
-  #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll1deg_grid.nc')
-  #test_obj = Bilinear('../../../grid/POP43.nc', '../../../grid/ll1deg_grid.nc')
-  #test_obj = Bilinear('../../grid/ll2.5deg_grid.nc', '../../grid/T42.nc')
-  #test_obj = Bilinear('../../grid/ll1deg_grid.nc', '../../grid/ll2.5deg_grid.nc')
-  #test_obj = Bilinear('../../grid/T42.nc', '../../grid/ll1deg_grid.nc')
+  comm = MPI.COMM_WORLD
+  size = comm.Get_size()
+  rank = comm.Get_rank()
   #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
   #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
   #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
-  test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc')
-  #test_obj = Bilinear('../../../grid/T42_Gaussian.nc', '../../../grid/Gamil_128x60_Grid.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
+  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc')
+  test_obj = Bilinear('../../../grid/T42_Gaussian.nc', '../../../grid/Gamil_128x60_Grid.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
   #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc')
+  print test_obj.dst_grid_size
+  print test_obj.dst_grid_dims
+  print test_obj.dst_grid_corners
+  print test_obj.dst_grid_rank
+  print len(test_obj.dst_grid_center_lat)
+  # for mpi use
+  test_obj.dst_distribute(rank, size)
   test_obj.interp()
-  test_obj.gen_remap_matrix_file()
-  remap_result = test_obj.remap()
-  print remap_result 
-   
+  # for mpi use
+  test_obj.dst_merge(rank, comm)
+  if rank == 0:
+    # compact remap matrix, gen remap_src_indx and remap_dst_indx
+    print 'Compacting remap matrix...'
+    Interp.compact_remap_matrix(test_obj)
+    print 'Compacting finished!'
+    test_obj.gen_remap_matrix_file()
+    remap_result = test_obj.remap()
+    print remap_result 
