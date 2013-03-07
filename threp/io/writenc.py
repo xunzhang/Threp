@@ -40,10 +40,10 @@ class Writenc(Exception):
     src_grid_center_lon_var = ncfile.createVariable('src_grid_center_lon', dtype('d').char, ('src_grid_size',))
     dst_grid_center_lat_var = ncfile.createVariable('dst_grid_center_lat', dtype('d').char, ('dst_grid_size',))
     dst_grid_center_lon_var = ncfile.createVariable('dst_grid_center_lon', dtype('d').char, ('dst_grid_size',))
-    src_grid_imask_var = ncfile.createVariable('src_grid_imask', dtype('int32').char, ('src_grid_size',))
-    dst_grid_imask_var = ncfile.createVariable('dst_grid_imask', dtype('int32').char, ('dst_grid_size',))
-    remap_src_indx_var = ncfile.createVariable('remap_src_indx', dtype('int32').char, ('n_wgt',))
-    remap_dst_indx_var = ncfile.createVariable('remap_dst_indx', dtype('int32').char, ('n_wgt',))
+    src_grid_imask_var = ncfile.createVariable('src_grid_imask', dtype('d').char, ('src_grid_size',))
+    dst_grid_imask_var = ncfile.createVariable('dst_grid_imask', dtype('d').char, ('dst_grid_size',))
+    remap_src_indx_var = ncfile.createVariable('remap_src_indx', dtype('d').char, ('n_wgt',))
+    remap_dst_indx_var = ncfile.createVariable('remap_dst_indx', dtype('d').char, ('n_wgt',))
     remap_matrix_var = ncfile.createVariable('remap_matrix', dtype('d').char, ('n_wgt',))
     
     src_grid_dims_var[:] = self.obj.src_grid_dims
