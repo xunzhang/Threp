@@ -82,12 +82,7 @@ class Interp(Exception):
       self.dst_grid_center_lat = [val for item in self.dst_grid_center_lat for val in item]
       self.dst_grid_center_lon = [val for item in self.dst_grid_center_lon for val in item]
       self.dst_grid_imask = [val for item in self.dst_grid_imask for val in item]
-    if rank == 1:
-      print self.remap_matrix[0]
-      print self.remap_matrix[1]
-      print self.remap_matrix[2]
-      print self.remap_matrix[3]
-      sys.exit() 
+
   def check_wgt(self, wgt):
     for item in wgt:
       if item > 2 or item < -2:
@@ -160,3 +155,56 @@ class Interp(Exception):
       self.dst_data[self.remap_dst_indx[i]] += self.remap_matrix_compact[i] * self.src_data[self.remap_src_indx[i]]
     return self.dst_data
 
+  # for mpi use
+  # parallelize with rows
+  # rank 0 measure load of remapping step
+  # only rank 0 needs to exec 
+  # [1, 1, 1, 2, 2, 2, 2, 4, 4, 5, 5, 5, 5, 6, 6, 6] -> [0:3], [3:7], [7:9], [9, 13], [13:16] -> [0, 3, 7, 9, 13, 16]
+  def learn(self, size):
+    tmp = list(set(self.remap_dst_indx))
+    learn_lst = [0]
+    load_sum = len(tmp)
+    load = load_sum / size
+    if load_sum % size:
+      last_load = load_sum - load * (size - 1)
+    else:
+      last_load = load
+    j = 0
+    cnt = 1
+    rank_cnt = 0
+    for i in xrange(len(self.remap_dst_indx)):
+      if self.remap_dst_indx[i] != tmp[j]:
+        if cnt == load:
+          if rank_cnt == size - 1:
+            break
+          rank_cnt += 1
+          learn_lst.append(i)
+          cnt = 0
+        cnt += 1
+        j += 1
+    learn_lst.append(len(self.remap_dst_indx))
+    return learn_lst
+    
+  # for mpi use
+  # only rank 0 needs to exec
+  # [0, 3, 7, 9, 16] -> [0:3] to rank 0
+  #                  -> [3:7] to rank 1
+  #                  -> [7:9] to rank 2
+  #                  -> [9:16] to rank 3
+  def deliver(self, deliver_disp, rank, size, comm):
+    if rank == 0:
+      for i in xrange(1, size):
+        buf1 = self.remap_dst_indx[deliver_disp[i] : deliver_disp[i + 1]]
+        buf2 = self.remap_src_indx[deliver_disp[i] : deliver_disp[i + 1]]
+        buf3 = self.remap_matrix_compact[deliver_disp[i] : deliver_disp[i + 1]]
+        comm.send(buf1, dest = i, tag = i)
+        comm.send(buf2, dest = i, tag = 2 * i + 1)
+        comm.send(buf3, dest = i, tag = 3 * i + 1)
+      self.remap_dst_indx = self.remap_dst_indx[deliver_disp[0] : delive_disp[1]]
+      self.remap_src_indx = self.remap_src_indx[deliver_disp[0] : delive_disp[1]]
+      self.remap_matrix_compact = self.remap_matrix_compact[deliver_disp[0] : delive_disp[1]]
+    else:
+      self.remap_dst_indx = comm.recv(source = 0, tag = rank)
+      self.remap_src_indx = comm.recv(source = 0, tag = 2 * rank + 1)
+      self.remap_matrix_compact = comm.recv(source = 0, tag = 3 * rank + 1)
+  
