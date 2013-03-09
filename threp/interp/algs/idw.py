@@ -10,6 +10,7 @@ import threp_import
 from nearest import Search
 from interp import Interp
 from idw_solver import Idw_Solver
+from pole_solver import Pole_Solver
 from writenc import Writenc
 from mpi4py import MPI
 
@@ -17,12 +18,13 @@ class Idw(Interp):
   
   # init Idw object.
   # init self.eps to avoid deviding by zero, init the search object self.idw_obj
-  def __init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name, k):
+  def __init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name, k, pole_flag):
     Interp.__init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name)
-    self.power = 1
+    self.power = 2
     self.eps = 1.0e-6
     self.nearest_k = k
     self.idw_obj = Search(self.stree_base_obj, self.stree)
+    self.pole_flag = pole_flag
   
   # local select in idw algorithm 
   # select nearest k no-mask-pnts in intermediate result
@@ -79,6 +81,28 @@ class Idw(Interp):
         self.remap_matrix_indx.append([])
         continue
       
+      # better wish, but disappointed
+      # tackle pole region
+      if self.pole_flag:
+        if dst_point[1] > self.pole_north_bnd:
+          print 'Tackling pole region'
+          idw_solver = Pole_Solver(dst_point, self.pole_north, self.nearest_k)
+          idw_solver.solve()
+          idw_box_indx = self.pole_north_indx[0:self.nearest_k]
+          idw_box_indx = Interp.indx_recovery(self, idw_box_indx)
+          self.remap_matrix.append(idw_solver.wgt_lst)
+          self.remap_matrix_indx.append(idw_box_indx)
+          continue
+        if dst_point[1] < self.pole_south_bnd:
+          print 'Tackling pole region'
+          idw_solver = Pole_Solver(dst_point, self.pole_south, self.nearest_k)
+          idw_solver.solve()
+          idw_box_indx = self.pole_south_indx[0:self.nearest_k]
+          idw_box_indx = Interp.indx_recovery(self, idw_box_indx)
+          self.remap_matrix.append(idw_solver.wgt_lst)
+          self.remap_matrix_indx.append(idw_box_indx)
+          continue
+     
       # normal case, init idw_solver 
       idw_solver = Idw_Solver(dst_point, neighbor_lst, self.eps, self.power)
       
@@ -148,7 +172,7 @@ if __name__ == '__main__':
   #test_obj = Idw('../../grid/T42.nc', '../../grid/POP43.nc', 4)
   #test_obj = Idw('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', 4)
   #test_obj = Idw('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', 4)
-  test_obj = Idw('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', 4)
+  test_obj = Idw('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', 4, True)
   test_obj.dst_distribute(rank, size)
   test_obj.interp()
   # for mpi use

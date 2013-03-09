@@ -14,15 +14,17 @@ from bilinear_predictor import Bilinear_Predictor
 from collineation import check_collineation
 from selectrect import is_convex_quadrangle 
 from idw_solver import Idw_Solver
+from pole_solver import Pole_Solver
 from writenc import Writenc
 from mpi4py import MPI
 import time
 
 class Bilinear(Interp):
   
-  def __init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name):
+  def __init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name, pole_flag):
     Interp.__init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name) 
     self.bilinearbox_obj = Bilinearbox(self.stree_base_obj, self.stree)
+    self.pole_flag = pole_flag
   
   def check_triangle(self, box):
     for i in range(4):
@@ -85,6 +87,29 @@ class Bilinear(Interp):
         indx = Interp.indx_recovery(self, indx)
         self.remap_matrix_indx.append(indx)
         continue
+      
+      # better wish, but disappointed 
+      # tackle pole region
+      if self.pole_flag:
+        if dst_point[1] > self.pole_north_bnd:
+          print 'Tackling pole region'
+          bilinear_solver = Pole_Solver(dst_point, self.pole_north, 4)
+          bilinear_solver.solve()
+          bilinear_box_indx = self.pole_north_indx[0:4]
+          bilinear_box_indx = Interp.indx_recovery(self, bilinear_box_indx)
+          self.remap_matrix.append(bilinear_solver.wgt_lst)
+          self.remap_matrix_indx.append(bilinear_box_indx)
+          continue
+        if dst_point[1] < self.pole_south_bnd:
+          print 'Tackling pole region'
+          bilinear_solver = Pole_Solver(dst_point, self.pole_south, 4)
+          bilinear_solver.solve()
+          bilinear_box_indx = self.pole_south_indx[0:4]
+          bilinear_box_indx = Interp.indx_recovery(self, bilinear_box_indx)
+          self.remap_matrix.append(bilinear_solver.wgt_lst)
+          self.remap_matrix_indx.append(bilinear_box_indx)
+          continue
+        
       # find a bilinear box
       outside_flag, full_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
       
@@ -175,7 +200,7 @@ if __name__ == '__main__':
   #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
   #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
   #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
-  test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc')
+  test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
   #test_obj = Bilinear('../../../grid/T42_Gaussian.nc', '../../../grid/Gamil_128x60_Grid.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
   #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc')
   print test_obj.dst_grid_size

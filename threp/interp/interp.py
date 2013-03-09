@@ -14,6 +14,33 @@ class Interp(Exception):
     src_nc_obj = Loadnc(src_grid_file_name)
     self.src_grid_size, self.src_grid_corners, self.src_grid_rank, self.src_grid_dims, self.src_grid_center_lat, self.src_grid_center_lon, self.src_grid_imask = src_nc_obj.load()
     src_nc_obj.closenc()
+    
+    # set south pole pnts
+    pole_num = 0
+    self.pole_south = []
+    self.pole_south_indx = []
+    for i in xrange(len(self.src_grid_center_lat)):
+      if self.src_grid_imask[i] == 1:
+        self.pole_south.append((self.src_grid_center_lon[i], self.src_grid_center_lat[i]))
+        self.pole_south_indx.append(i)
+        pole_num += 1
+      if pole_num == 10:
+        break  
+    self.pole_south_bnd = min([item[1] for item in self.pole_south])
+    # set north pole pnts
+    pole_num = 0
+    self.pole_north = []
+    self.pole_north_indx = []
+    j = len(self.src_grid_center_lat)
+    while True:
+      j -= 1
+      if self.src_grid_imask[j] == 1:
+        self.pole_north.append((self.src_grid_center_lon[j], self.src_grid_center_lat[j]))
+        self.pole_north_indx.append(j)
+        pole_num += 1
+      if pole_num == 10:
+        break
+    self.pole_north_bnd = max([item[1] for item in self.pole_north])
 
     # original grid info
     # used for remap matrix file
@@ -148,10 +175,10 @@ class Interp(Exception):
   def remap(self):
     # init dst_data list as 0.0
     print max(self.remap_dst_indx)
-    for i in range(max(self.remap_dst_indx) + 1):
+    for i in xrange(max(self.remap_dst_indx) + 1):
       self.dst_data.append(0.0)
     # interpolate    
-    for i in range(len(self.remap_matrix_compact)):
+    for i in xrange(len(self.remap_matrix_compact)):
       self.dst_data[self.remap_dst_indx[i]] += self.remap_matrix_compact[i] * self.src_data[self.remap_src_indx[i]]
     return self.dst_data
 
