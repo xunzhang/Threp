@@ -36,7 +36,7 @@ class Search(Exception):
       result_lst.append((self.stree_base.grid_center_lon[indx], self.stree_base.grid_center_lat[indx]))
     # format shuffle pair:
     # [(indx1, (lon1, lat1)), (indx2, (lon2, lat2))]
-    shuf_pair = [(result_indx[i], result_lst[i]) for i in range(len(result_indx))]
+    shuf_pair = [(result_indx[i], result_lst[i]) for i in xrange(len(result_indx))]
     # shuf_pair = (result_indx, result_lst)
     # shuffer the recursive results, from nearest to far
     result_indx, result_lst = self.__shuffle(query_point, shuf_pair)

@@ -33,12 +33,12 @@ class Build(Exception):
     ghost_point_lat_lst = []
     ghost_point_lon_lst = []
     # trav every lat, set leftest boundary
-    for i in range(self.grid_dims[1]):
+    for i in xrange(self.grid_dims[1]):
       # insert rightest ghost point
       ghost_point_lat_lst.append(self.grid_center_lat[i + i * self.grid_dims[0]])
       ghost_point_lon_lst.append(self.grid_center_lon[0] + 360)
     # trav every lat, set rightest boundary 
-    for i in range(self.grid_dims[1]):
+    for i in xrange(self.grid_dims[1]):
       # insert leftest ghost point
       ghost_point_lat_lst.append(self.grid_center_lat[i + i * self.grid_dims[0]])
       ghost_point_lon_lst.append(self.grid_center_lon[self.grid_dims[0] - 1] - 360)
@@ -49,7 +49,7 @@ class Build(Exception):
     for lon in ghost_point_lon_lst:
       self.grid_center_lon.append(lon)
     # append relative mask value
-    for i in range(len(ghost_point_lat_lst)):
+    for i in xrange(len(ghost_point_lat_lst)):
       self.grid_imask.append(1)
     
   def grow(self):

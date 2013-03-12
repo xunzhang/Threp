@@ -23,9 +23,9 @@ class Bilinear(Interp):
     self.bilinearbox_obj = Bilinearbox(self.stree_base_obj, self.stree)
   
   def check_triangle(self, box):
-    for i in range(4):
-      for j in range(i + 1, 4):
-        for k in range(j + 1, 4):
+    for i in xrange(4):
+      for j in xrange(i + 1, 4):
+        for k in xrange(j + 1, 4):
           if check_collineation(box[i], box[j], box[k]):
             return True
     return False
@@ -49,7 +49,7 @@ class Bilinear(Interp):
     #point = (self.dst_grid_center_lon[0], self.dst_grid_center_lat[0])
     #point = (0.0, 0.0)
     n = len(self.dst_grid_center_lon)
-    for i in range(n):
+    for i in xrange(n):
       # ignore masked pnt
       if self.dst_grid_imask[i] == 0:
         print 'My mask is zero!'

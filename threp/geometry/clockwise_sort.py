@@ -32,7 +32,7 @@ def clockwise_sort_indx(rect_indx, rect_box):
     print 'invalid input in clockwise_sort function.'
     sys.exit()
   # use default sort of 4 tuples, by cmp the first dim
-  sort_pair = [(rect_indx[i], rect_box[i]) for i in range(len(rect_indx))]
+  sort_pair = [(rect_indx[i], rect_box[i]) for i in xrange(len(rect_indx))]
   sort_pair.sort(cmp = lambda x, y:cmp(x[1], y[1]))
   rect_indx = [item[0] for item in sort_pair]
   rect_box = [item[1] for item in sort_pair]

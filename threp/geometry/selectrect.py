@@ -50,12 +50,12 @@ def select_containing_rect(pnt, neighbor_indx, neighbor_lst):
     print 'Bugs in selectrect.py!!'
     sys.exit(), 
   # pnt_num must be less than 35, i < j < k
-  for i in range(pnt_num):
-    for j in range(i + 1, pnt_num):
-      for k in range(j + 1, pnt_num):
+  for i in xrange(pnt_num):
+    for j in xrange(i + 1, pnt_num):
+      for k in xrange(j + 1, pnt_num):
         triangle = [neighbor_lst[i], neighbor_lst[j], neighbor_lst[k]]
         if is_contain(pnt, triangle):
-          for l in range(k + 1, pnt_num):
+          for l in xrange(k + 1, pnt_num):
             rect = copy.deepcopy(triangle)
             rect.append(neighbor_lst[l])
             if is_contain(pnt, rect):

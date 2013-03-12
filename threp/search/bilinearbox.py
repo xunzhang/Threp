@@ -23,7 +23,7 @@ class Bilinearbox(Search):
   def filter_mask(self, indx, lst):
     a = []
     b = []
-    for i in range(len(indx)):
+    for i in xrange(len(indx)):
       # if mask is 1
       if self.stree_base.grid_imask[indx[i]]:
         a.append(indx[i])

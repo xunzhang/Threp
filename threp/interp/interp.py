@@ -32,7 +32,8 @@ class Interp(Exception):
     self.pole_north = []
     self.pole_north_indx = []
     j = len(self.src_grid_center_lat)
-    while True:
+    #while True:
+    while 1:
       j -= 1
       if self.src_grid_imask[j] == 1:
         self.pole_north.append((self.src_grid_center_lon[j], self.src_grid_center_lat[j]))

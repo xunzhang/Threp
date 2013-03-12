@@ -26,6 +26,6 @@ class Idw_Solver(Solver):
       self.wgt_lst.append(val)
       wgt_sum +=  val
     # normalization
-    for i in range(len(self.wgt_lst)):
+    for i in xrange(len(self.wgt_lst)):
       self.wgt_lst[i] /= wgt_sum
      

@@ -32,7 +32,7 @@ class Idw(Interp):
     num = 0
     a = []
     b = []
-    for i in range(len(indx)):
+    for i in xrange(len(indx)):
       if self.src_grid_imask[indx[i]] == 0:
         continue
       a.append(indx[i])
@@ -62,7 +62,7 @@ class Idw(Interp):
   def interp(self):
     n = len(self.dst_grid_center_lon)
     # traverse dst pnt
-    for i in range(n):
+    for i in xrange(n):
       # ignore masked pnt
       if self.dst_grid_imask[i] == 0:
         print 'My mask is zero!'
