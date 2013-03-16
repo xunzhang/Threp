@@ -288,7 +288,7 @@ class KDTree(object):
                 # brute-force
                 data = self.data[node.idx]
                 ds = minkowski_distance_p(data,x[np.newaxis,:],p)
-                for i in range(len(ds)):
+                for i in xrange(len(ds)):
                     if ds[i]<distance_upper_bound:
                         if len(neighbors)==k:
                             heappop(neighbors)
@@ -441,7 +441,7 @@ class KDTree(object):
                     dd[c] = [d for (d,i) in hits]
                     ii[c] = [i for (d,i) in hits]
                 elif k>1:
-                    for j in range(len(hits)):
+                    for j in xrange(len(hits)):
                         dd[c+(j,)], ii[c+(j,)] = hits[j]
                 elif k==1:
                     if len(hits)>0:
@@ -464,7 +464,7 @@ class KDTree(object):
                 dd.fill(np.inf)
                 ii = np.empty(k,dtype=np.int)
                 ii.fill(self.n)
-                for j in range(len(hits)):
+                for j in xrange(len(hits)):
                     dd[j], ii[j] = hits[j]
                 return dd, ii
             else:
@@ -574,7 +574,7 @@ class KDTree(object):
             list of the indices of its neighbors in ``other.data``.
 
         """
-        results = [[] for i in range(self.n)]
+        results = [[] for i in xrange(self.n)]
         def traverse_checking(node1, rect1, node2, rect2):
             if rect1.min_distance_rectangle(rect2, p)>r/(1.+eps):
                 return
@@ -893,9 +893,9 @@ def distance_matrix(x,y,p=2,threshold=1000000):
     else:
         result = np.empty((m,n),dtype=np.float) #FIXME: figure out the best dtype
         if m<n:
-            for i in range(m):
+            for i in xrange(m):
                 result[i,:] = minkowski_distance(x[i],y,p)
         else:
-            for j in range(n):
+            for j in xrange(n):
                 result[:,j] = minkowski_distance(x,y[j],p)
         return result

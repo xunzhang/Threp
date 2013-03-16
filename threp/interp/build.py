@@ -27,8 +27,30 @@ class Build(Exception):
     coords_pair_lst = zip(self.grid_center_lon, self.grid_center_lat)
     return coords_pair_lst
   
-  # logical rectangle only, by now 
   def __add_ghost_boundary(self):
+    recovery_indx_table = {} 
+    key = self.grid_size - 1 
+    for i in xrange(self.grid_size):
+      if self.grid_center_lon[i] > 357.0 and self.grid_center_lon[i] < 360.0:
+        if self.grid_imask[i] != 0:
+          ghost_lon = self.grid_center_lon[i] - 360
+          self.grid_center_lat.append(self.grid_center_lat[i])
+          self.grid_center_lon.append(ghost_lon)
+          self.grid_imask.append(1)
+          key += 1
+          recovery_indx_table[key] = i 
+      if self.grid_center_lon[i] < 3.0 and self.grid_center_lon[i] > 0.0:
+        if self.grid_imask[i] != 0:
+          ghost_lon = self.grid_center_lon[i] + 360
+          self.grid_center_lat.append(self.grid_center_lat[i])
+          self.grid_center_lon.append(ghost_lon)
+          self.grid_imask.append(1)
+          key += 1
+          recovery_indx_table[key] = i
+    return recovery_indx_table
+   
+  # logical rectangle only, by now, mask for ghost points is set 1
+  def __add_lrec_ghost_boundary(self):
     # now I just add one layer ghost
     ghost_point_lat_lst = []
     ghost_point_lon_lst = []
@@ -53,12 +75,12 @@ class Build(Exception):
       self.grid_imask.append(1)
     
   def grow(self):
-    self.__add_ghost_boundary()
+    recovery_indx_table = self.__add_ghost_boundary()
     coords_pair_lst = self.__gen_coords_pair_lst()
     stree = KDTree(coords_pair_lst)
     #stree = spatial.KDTree(coords_pair_lst)
     #print stree.data
-    return stree
+    return recovery_indx_table, stree
     
 if __name__ == '__main__':
   grid_size = 6

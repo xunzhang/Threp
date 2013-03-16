@@ -54,7 +54,7 @@ class Interp(Exception):
     dst_nc_obj.closenc()
     
     self.stree_base_obj = Build(self.src_grid_size, self.src_grid_corners, self.src_grid_rank, self.src_grid_dims, self.src_grid_center_lat, self.src_grid_center_lon, self.src_grid_imask)
-    self.stree = self.stree_base_obj.grow()
+    self.recovery_indx_table, self.stree = self.stree_base_obj.grow()
     
     self.src_grid_name = src_grid_file_name.split('/')[-1].split('.')[0]
     self.dst_grid_name = dst_grid_file_name.split('/')[-1].split('.')[0]
@@ -137,8 +137,19 @@ class Interp(Exception):
       return True
     else:
       return False
-    
+  
   def indx_recovery(self, indx_lst):
+    tmp_indx = [] 
+    for i in indx_lst:
+      if i >= self.src_grid_size:
+        print 'recovery ghost index.'
+        tmp_indx.append(self.recovery_indx_table[i])
+      else:
+        tmp_indx.append(i)
+    indx_lst = tmp_indx
+    return indx_lst
+
+  def indx_lrec_recovery(self, indx_lst):
     tmp_indx = []
     for i in indx_lst:
       if i >= self.src_grid_size:
