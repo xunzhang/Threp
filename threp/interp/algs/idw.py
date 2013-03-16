@@ -41,9 +41,9 @@ class Idw(Interp):
       if num == k:
         break
     if num < k:
+      print "Not full k"
       #for i in indx:
       #  print self.src_grid_imask[i]
-      print 'Not full k'
       #sys.exit()
     return a, b
   

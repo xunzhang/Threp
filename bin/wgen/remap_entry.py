@@ -39,6 +39,6 @@ if __name__ == '__main__':
   size = comm.Get_size()
   rank = comm.Get_rank()
   neighbor_num = 4
-  #remap_entry('../../grid/T42_Gaussian_POP43/POP43.nc', '../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', idw.Idw, 'null', True, False, rank, size, comm, neighbor_num)
-  remap_entry('../../grid/T42_Gaussian_POP43/POP43.nc', '../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', bilinear.Bilinear, 'null', True, False, rank, size, comm)
+  remap_entry('../../grid/T42_Gaussian_POP43/POP43.nc', '../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', idw.Idw, 'null', False, False, rank, size, comm, neighbor_num)
+  #remap_entry('../../grid/T42_Gaussian_POP43/POP43.nc', '../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', bilinear.Bilinear, 'null', True, False, rank, size, comm)
   
