@@ -7,8 +7,11 @@ __author__ = ['Wu Hong<xunzhangthu@gmail.com>']
 
 import sys
 import copy
-from planar import Polygon
-from planar import Point
+
+from vector import Vec2 as Point
+from polygon import Polygon
+#from planar import Polygon
+#from planar import Point
 from clockwise_sort import clockwise_sort
 
 #from matplotlib.path import Path

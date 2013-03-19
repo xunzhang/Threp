@@ -3,7 +3,7 @@
 
 import os
 import sys
-from config.threp_dir import THREP_DIR
+from threp.config.threp_dir import THREP_DIR
 
 # check THREP_DIR
 if not THREP_DIR:
@@ -14,12 +14,12 @@ if not THREP_DIR:
 # cp import file for modules
 filename = 'threp_dir.py'
 
-command = 'cp ./threp/config/' + filename + ' ./interp/' + filename
+command = 'cp ./threp/config/' + filename + ' ./threp/interp/' + filename
 os.system(command)
-command = 'cp ./threp/config/' + filename + ' ./interp/algs' + filename
+command = 'cp ./threp/config/' + filename + ' ./threp/interp/algs/' + filename
 os.system(command)
-command = 'cp ./threp/config/' + filename + ' ./search/' + filename
+command = 'cp ./threp/config/' + filename + ' ./threp/search/' + filename
 os.system(command)
-command = 'cp ./threp/config/' + filename + ' ./solver' + filename
+command = 'cp ./threp/config/' + filename + ' ./threp/solver/' + filename
 os.system(command)
 
