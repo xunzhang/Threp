@@ -7,7 +7,8 @@ __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
 import sys
 import time
-import scipy
+#import scipy
+import numpy as np
 from numpy import dtype
 from Scientific.IO.NetCDF import NetCDFFile as Dataset 
 
@@ -49,15 +50,15 @@ class Writenc(Exception):
     src_grid_dims_var[:] = self.obj.src_grid_dims
     dst_grid_dims_var[:] = self.obj.dst_grid_dims
     print len(self.obj.original_src_grid_center_lat)
-    src_grid_center_lat_var[:] = scipy.array(self.obj.original_src_grid_center_lat)
-    src_grid_center_lon_var[:] = scipy.array(self.obj.original_src_grid_center_lon)
-    dst_grid_center_lat_var[:] = scipy.array(self.obj.dst_grid_center_lat)
-    dst_grid_center_lon_var[:] = scipy.array(self.obj.dst_grid_center_lon)
-    src_grid_imask_var[:] = scipy.array(self.obj.original_src_grid_imask)
-    dst_grid_imask_var[:] = scipy.array(self.obj.dst_grid_imask)
-    remap_src_indx_var[:] = scipy.array(self.obj.remap_src_indx)
-    remap_dst_indx_var[:] = scipy.array(self.obj.remap_dst_indx)
-    remap_matrix_var[:] = scipy.array(self.obj.remap_matrix_compact)
+    src_grid_center_lat_var[:] = np.array(self.obj.original_src_grid_center_lat)
+    src_grid_center_lon_var[:] = np.array(self.obj.original_src_grid_center_lon)
+    dst_grid_center_lat_var[:] = np.array(self.obj.dst_grid_center_lat)
+    dst_grid_center_lon_var[:] = np.array(self.obj.dst_grid_center_lon)
+    src_grid_imask_var[:] = np.array(self.obj.original_src_grid_imask)
+    dst_grid_imask_var[:] = np.array(self.obj.dst_grid_imask)
+    remap_src_indx_var[:] = np.array(self.obj.remap_src_indx)
+    remap_dst_indx_var[:] = np.array(self.obj.remap_dst_indx)
+    remap_matrix_var[:] = np.array(self.obj.remap_matrix_compact)
     
     setattr(ncfile, 'title', 'Threp ' + self.fname)
     setattr(ncfile, 'createdate', tm)
