@@ -10,8 +10,7 @@ import time
 #import scipy
 import numpy as np
 from numpy import dtype
-#from Scientific.IO.NetCDF import NetCDFFile as Dataset 
-from Scientific_netcdf import NetCDFFile as Dataset
+from Scientific.IO.NetCDF import NetCDFFile as Dataset 
 
 class Writenc(Exception):
    
