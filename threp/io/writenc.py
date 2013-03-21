@@ -7,11 +7,10 @@ __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
 import sys
 import time
-#import scipy
+import scipy
 import numpy as np
 from numpy import dtype
-#from Scientific.IO.NetCDF import NetCDFFile as Dataset 
-from Scientific_netcdf import NetCDFFile as Dataset
+from Scientific.IO.NetCDF import NetCDFFile as Dataset 
 
 class Writenc(Exception):
    
@@ -42,23 +41,30 @@ class Writenc(Exception):
     src_grid_center_lon_var = ncfile.createVariable('src_grid_center_lon', dtype('d').char, ('src_grid_size',))
     dst_grid_center_lat_var = ncfile.createVariable('dst_grid_center_lat', dtype('d').char, ('dst_grid_size',))
     dst_grid_center_lon_var = ncfile.createVariable('dst_grid_center_lon', dtype('d').char, ('dst_grid_size',))
-    src_grid_imask_var = ncfile.createVariable('src_grid_imask', dtype('int').char, ('src_grid_size',))
-    dst_grid_imask_var = ncfile.createVariable('dst_grid_imask', dtype('int').char, ('dst_grid_size',))
-    remap_src_indx_var = ncfile.createVariable('remap_src_indx', dtype('int').char, ('n_wgt',))
-    remap_dst_indx_var = ncfile.createVariable('remap_dst_indx', dtype('int').char, ('n_wgt',))
+    src_grid_imask_var = ncfile.createVariable('src_grid_imask', dtype('i').char, ('src_grid_size',))
+    dst_grid_imask_var = ncfile.createVariable('dst_grid_imask', dtype('i').char, ('dst_grid_size',))
+    remap_src_indx_var = ncfile.createVariable('remap_src_indx', dtype('i').char, ('n_wgt',))
+    remap_dst_indx_var = ncfile.createVariable('remap_dst_indx', dtype('i').char, ('n_wgt',))
     remap_matrix_var = ncfile.createVariable('remap_matrix', dtype('d').char, ('n_wgt',))
     
     src_grid_dims_var[:] = self.obj.src_grid_dims
     dst_grid_dims_var[:] = self.obj.dst_grid_dims
-    print len(self.obj.original_src_grid_center_lat)
     src_grid_center_lat_var[:] = np.array(self.obj.original_src_grid_center_lat)
     src_grid_center_lon_var[:] = np.array(self.obj.original_src_grid_center_lon)
     dst_grid_center_lat_var[:] = np.array(self.obj.dst_grid_center_lat)
     dst_grid_center_lon_var[:] = np.array(self.obj.dst_grid_center_lon)
-    src_grid_imask_var[:] = np.array(self.obj.original_src_grid_imask)
-    dst_grid_imask_var[:] = np.array(self.obj.dst_grid_imask)
-    remap_src_indx_var[:] = np.array(self.obj.remap_src_indx)
-    remap_dst_indx_var[:] = np.array(self.obj.remap_dst_indx)
+    #src_grid_imask_var[:] = np.array(self.obj.original_src_grid_imask)
+    buffer1 = [np.int32(i) for i in self.obj.original_src_grid_imask]
+    src_grid_imask_var[:] = np.array(buffer1)
+    buffer2 = [np.int32(i) for i in self.obj.dst_grid_imask]
+    dst_grid_imask_var[:] = np.array(buffer2)
+    #dst_grid_imask_var[:] = np.array(self.obj.dst_grid_imask)
+    buffer3 = [np.int32(i) for i in self.obj.remap_src_indx]
+    remap_src_indx_var[:] = np.array(buffer3)
+    #remap_src_indx_var[:] = np.array(self.obj.remap_src_indx)
+    buffer4 = [np.int32(i) for i in self.obj.remap_dst_indx]
+    remap_dst_indx_var[:] = np.array(buffer4)
+    #remap_dst_indx_var[:] = np.array(self.obj.remap_dst_indx)
     remap_matrix_var[:] = np.array(self.obj.remap_matrix_compact)
     
     setattr(ncfile, 'title', 'Threp ' + self.fname)

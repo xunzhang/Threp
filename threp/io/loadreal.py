@@ -5,8 +5,7 @@
 
 __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
-#from Scientific.IO.NetCDF import NetCDFFile as Dataset
-from Scientific_netcdf import NetCDFFile as Dataset
+from Scientific.IO.NetCDF import NetCDFFile as Dataset
 
 class Loadreal(Exception):
   
