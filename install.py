@@ -22,4 +22,6 @@ command = 'cp ./threp/config/' + filename + ' ./threp/search/' + filename
 os.system(command)
 command = 'cp ./threp/config/' + filename + ' ./threp/solver/' + filename
 os.system(command)
+command = 'cp ./threp/config/' + filename + ' ./bin/wgen/' + filename
+os.system(command)
 
