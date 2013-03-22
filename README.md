@@ -16,20 +16,24 @@ I. Install NumPy Python Library. NumPy is the fundamental package for scientific
 II. Install MPI4Py Python Library. MPI4Py is a Python version of MPI. See more infomation at http://mpi4py.scipy.org. 
 III. Install Scientific Python Library to support NetCDF(a kind of binary file) file format in Threp, see more infomation at http://gfesuite.noaa.gov/developer/netCDFPythonInterface.html.
 IV. Define environment variable 'THREP_DIR' in $THREP_DIR/config/threp_dir.py, and then type
+
 ``` bash
- python install.py
+$ python install.py
 ```
+
 V. Now you are successfully installed Threp, have fun.
 
 
 Tests
 -----
 Example for generating a remapping weight file:
+
 ``` bash
- cd $THREP_DIR/../bin/wgen/
- python remap_entry.py	# serial
- mpirun -n $num python remap_entry.py	# parallel
+$ cd $THREP_DIR/../bin/wgen/
+$ python remap_entry.py	# serial
+$ mpirun -n $num python remap_entry.py	# parallel
 ```  
+
 Here, you can modify remap_entry.py file(line 42) to reset your input. 
 Python2.7 or earlier tested.
 
