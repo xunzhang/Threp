@@ -43,6 +43,10 @@ Here, you can modify remap_entry.py file(line 42) to reset your input.
 Python2.7 or earlier tested.
 
 Example for developing a new remapping algorithm:
+
   Create a algname.py at $THREP_DIR/interp/algs.
+
   Write a class which inherit the Interp superclass, that means you can use lots of functions in class Interp.
+
   Rewrite interp method in your newalg class, just a long loop(100~200 LOC)
+
