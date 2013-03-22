@@ -18,7 +18,11 @@ III. Install Scientific Python Library to support NetCDF(a kind of binary file) 
 IV. Define environment variable 'THREP_DIR' in $THREP_DIR/config/threp_dir.py, and then type
 
 ``` bash
+<<<<<<< HEAD:README.md
 $ python install.py
+=======
+ $python install.py
+>>>>>>> fb5f7f3b514860a976b6d79a6f706d57f0ada762:README
 ```
 
 V. Now you are successfully installed Threp, have fun.
@@ -29,9 +33,15 @@ Tests
 Example for generating a remapping weight file:
 
 ``` bash
+<<<<<<< HEAD:README.md
 $ cd $THREP_DIR/../bin/wgen/
 $ python remap_entry.py	# serial
 $ mpirun -n $num python remap_entry.py	# parallel
+=======
+ $cd $THREP_DIR/../bin/wgen/
+ $python remap_entry.py	# serial
+ $mpirun -n $num python remap_entry.py	# parallel
+>>>>>>> fb5f7f3b514860a976b6d79a6f706d57f0ada762:README
 ```  
 
 Here, you can modify remap_entry.py file(line 42) to reset your input. 
