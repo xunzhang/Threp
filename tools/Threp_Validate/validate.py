@@ -78,6 +78,7 @@ if __name__ == '__main__':
   err_acc = 0.0
   max_err = 0.0
   i = 0
+  print len(dst_data)
   for item in dst_data:
     if item:
       lat = dst_coords_lat[i] * math.pi / 180
