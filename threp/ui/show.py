@@ -10,9 +10,9 @@ import Tix
 import threp_import
 import bilinear
 
-def remap_entry(src_file, dst_file, alg_name, real_data_file, offline_flag):
+def remap_entry(src_file, dst_file, alg_name, real_data_file, offline_flag, pole_flag):
   if offline_flag:
-    test_obj = alg_name(src_file, dst_file, False, real_data_file)
+    test_obj = alg_name(src_file, dst_file, False, real_data_file, pole_flag)
   else:
     test_obj = alg_name(src_file, dst_file, True, real_data_file)
   test_obj.interp()
@@ -48,7 +48,7 @@ def offline_menu():
   Tk.Label(board, text = ' Pole Option: ').pack(side = 'left')
   ttk.Combobox(board, textvariable = variable_pole_option, values=['none', 'all']).pack(side = 'left')
   #remap_button = Tk.Button(board, text = 'Remap', command = lambda: demo(val))
-  remap_button = Tk.Button(board, text = 'Remap', command = lambda: remap_entry('../../grid/T42_Gaussian_POP43/POP43.nc', '../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', bilinear.Bilinear, 'null', True))
+  remap_button = Tk.Button(board, text = 'Remap', command = lambda: remap_entry('../../grid/T42_Gaussian_POP43/POP43.nc', '../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', bilinear.Bilinear, 'null', True, False))
   remap_button.pack(side = 'left')
   board.mainloop() 
 
