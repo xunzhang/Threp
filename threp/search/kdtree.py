@@ -4,6 +4,8 @@
 
 import sys
 import numpy as np
+import copy
+from ast import literal_eval
 #from heapq import heappush, heappop
 #import scipy.sparse
 
@@ -471,30 +473,121 @@ class KDTree(object):
                 raise ValueError("Requested %s nearest neighbors; acceptable numbers are integers greater than or equal to one, or None")
 
 
+    def cache(func):
+      caches = {}
+      def _cache(*args, **kw):
+        s1 = str(args[1]).strip('<?>').split(' ')[-1]
+        #tmp = str(args[2]).strip('<?>')[11:-1]
+        #s2_1 = literal_eval(tmp[0 : tmp.find('),') + 1])
+        #s2_2 = literal_eval(tmp[tmp.find('),') + 3:])
+        r = args[4]
+        #key = (s1, s2_1, s2_2)
+        #key = (s1, s2_1, s2_2, r)
+        key = (s1, (args[3][0], args[3][1]), r)
+        #print caches
+        #print 'beg'
+        #print args[3]
+        #print args
+        #print func(*args, **kw) 
+        #print key
+        if key in caches:
+          return caches[key]
+        result = func(*args, **kw)
+        #print result
+        #print 'end'
+        caches[key] = result
+        return caches[key]
+      return _cache
+
+    def traverse_no_checking_opt(self, node):
+        if isinstance(node, KDTree.leafnode):
+            return node.idx.tolist()
+        else:
+            return self.traverse_no_checking_opt(node.less) + \
+                   self.traverse_no_checking_opt(node.greater)
+
+    @cache
+    def traverse_checking_opt(self, node, rect, x, r, p = 2., eps = 0):
+        if rect.min_distance_point(x, p) > r / (1. + eps):
+            return []
+        elif rect.max_distance_point(x, p) < r * (1. + eps):
+            return self.traverse_no_checking_opt(node)
+        elif isinstance(node, KDTree.leafnode):
+            d = self.data[node.idx]
+            return node.idx[minkowski_distance(d, x, p) <= r].tolist()
+        else:
+            less, greater = rect.split(node.split_dim, node.split)
+            return self.traverse_checking_opt(node.less, less, x, r, p, eps) + \
+                   self.traverse_checking_opt(node.greater, greater, x, r, p, eps)
+    
     def __query_ball_point(self, x, r, p=2., eps=0):
         R = Rectangle(self.maxes, self.mins)
+	#def cache(func):
+	#    caches = {}
+        #    def _cache(*args, **kw):
+	#      key = str(args[1])
+	#      print args 
+	#      if key in caches:
+	#        print 'good'
+	#        return caches[key]
+        #      result = func(*args, **kw)
+        #      caches[key] = result
+	#      return caches[key] 
+        #    return _cache
 
-        def traverse_checking(node, rect):
-            if rect.min_distance_point(x, p) > r / (1. + eps):
-                return []
-            elif rect.max_distance_point(x, p) < r * (1. + eps):
-                return traverse_no_checking(node)
-            elif isinstance(node, KDTree.leafnode):
-                d = self.data[node.idx]
-                return node.idx[minkowski_distance(d, x, p) <= r].tolist()
-            else:
-                less, greater = rect.split(node.split_dim, node.split)
-                return traverse_checking(node.less, less) + \
-                       traverse_checking(node.greater, greater)
-
-        def traverse_no_checking(node):
-            if isinstance(node, KDTree.leafnode):
-                return node.idx.tolist()
-            else:
-                return traverse_no_checking(node.less) + \
-                       traverse_no_checking(node.greater)
-
-        return traverse_checking(self.tree, R)
+        #@cache	
+        #def traverse_checking(node, rect):
+        #    if rect.min_distance_point(x, p) > r / (1. + eps):
+        #        return []
+        #    elif rect.max_distance_point(x, p) < r * (1. + eps):
+        #        return traverse_no_checking(node)
+        #    elif isinstance(node, KDTree.leafnode):
+        #        d = self.data[node.idx]
+        #        return node.idx[minkowski_distance(d, x, p) <= r].tolist()
+        #    else:
+        #        less, greater = rect.split(node.split_dim, node.split)
+        #        return traverse_checking(node.less, less) + \
+        #               traverse_checking(node.greater, greater)
+	
+	#@cache
+        #def traverse_no_checking(node):
+        #    if isinstance(node, KDTree.leafnode):
+        #        return node.idx.tolist()
+        #    else:
+        #        return traverse_no_checking(node.less) + \
+        #               traverse_no_checking(node.greater)
+	
+	#def traverse_no_checking(node):
+        #    original_node = copy.deepcopy(node)
+        #    cnt = 0
+        #    flag = False
+	#    while True:
+        #        if isinstance(node, KDTree.leafnode):
+        #            if cnt == 0:
+        #                flag = True
+        #            less_lst = node.idx.tolist()
+        #            break
+        #        node = node.less
+        #    while True:
+        #        if isinstance(original_node, KDTree.leafnode):
+        #            if flag:
+        #                greater_lst = []
+        #                break
+        #            greater_lst = original_node.idx.tolist()
+        #            break
+        #        original_node = original_node.greater
+        #    return less_lst + greater_lst
+	
+        #return traverse_checking_opt(self.tree, R)
+        #print 'result is'
+        #print self.tree
+        #print R
+        #print x
+        #print r
+        #print p
+        #print self.traverse_checking_opt(self.tree, R, x, r, p, eps)
+        #print 'result end'
+        return self.traverse_checking_opt(self.tree, R, x, r, p, eps)
 
     def query_ball_point(self, x, r, p=2., eps=0):
         """Find all points within distance r of point(s) x.

@@ -75,15 +75,19 @@ if __name__ == '__main__':
   diff_lst = []
   for item in dst_data:
     lat_lst.append(dst_coords_lat[i])
-    lon_lst.append(dst_coords_lon[i])
+    lon_lst.append(dst_coords_lon[i] - 180.0)
     if item:
       lat = dst_coords_lat[i] * math.pi / 180
       lon = dst_coords_lon[i] * math.pi / 180
       real = test_func1(lat, lon)
+      if dst_coords_lon[i] == 177.1875:#,180:#0:#357.1875:
+        print real
       r_err = abs(real - item) / real
       real_lst.append(real)
       item_lst.append(item)
       diff_lst.append(r_err)
+      if r_err < -1.0:
+        print r_err
     else:
       real_lst.append(0.0)
       item_lst.append(0.0)
