@@ -14,6 +14,42 @@ __all__ = ['minkowski_distance_p', 'minkowski_distance',
            'Rectangle', 'KDTree']
 
 
+def dist_cache(func):
+    dis_caches = {}
+    def _dist_cache(*args, **kw):
+        key = (args[0], args[1], args[2])
+        if key in dis_caches:
+          return dis_caches[key]
+        result = func(*args, **kw)
+        dis_caches[key] = result
+        return dis_caches[key]
+    return _dist_cache
+
+@dist_cache
+def local_distance_p(x, y, p = 2):
+    print 'no'
+    print x
+    print y
+    return (y[0] - x[0]) ** p + (y[1] - x[1]) ** p
+
+#def minkowski_distance_p(x, y, p = 2):
+#    if p == np.inf:
+#      return np.amax(np.abs(np.asarray(y) - np.asarray(x)), axis = -1)
+#    elif p == 1:
+#      return np.sum(np.abs(np.asarray(y) - np.asarray(x)), axis = -1)
+#    else:
+#      if x == 0.0:
+#        x = [(0.0, 0.0)]
+#      res = []
+#      for itemx in x:
+#        for itemy in y:
+#          if itemx == 0.0:
+#            itemx = (0.0, 0.0)
+#          if itemy == 0.0:
+#            itemy = (0.0, 0.0)
+#          res.append(local_distance_p(itemx, itemy, p))
+#      return np.asarray(res) 
+    
 def minkowski_distance_p(x, y, p=2):
     """
     Compute the p-th power of the L**p distance between x and y.
