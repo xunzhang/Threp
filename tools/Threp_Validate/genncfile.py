@@ -15,7 +15,7 @@ from Scientific.IO.NetCDF import NetCDFFile as Dataset
 class Genncfile(Exception):
    
   def __init__(self, filename, remap_obj, methodname):
-    self.fname = filename
+    self.fname = methodname + '_' + filename
     self.obj = remap_obj
     self.method = methodname
   

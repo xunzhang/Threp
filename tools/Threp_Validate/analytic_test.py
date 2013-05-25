@@ -14,7 +14,7 @@ def test_func1(lat, lon):
 
 # 2 + cos(lat)^2 * sin(2lon)
 def test_func2(lat, lon):
-  return 2 + math.cos(lat) ** 2 * math.sin(2 * lon) 
+  return 2 + math.cos(lat) ** 2 * math.cos(2 * lon) 
 
 # 2 + sin(2lat)^16 * cos(16lon)
 def test_func3(lat, lon):
@@ -51,21 +51,27 @@ def load_rmpwfile(fname):
 def parse(name):
   st = name.strip('.nc')
   algname = st.split('_')[-1]
-  srcname = 'T42_Gaussian'
-  dstname =  'Gamil_128x60_Grid'
+  srcname = 'T42_Gaussian_Grid'
+  dstname =  'Ocean_1v1_triplepole_grid'
   return srcname, dstname, algname
   
 if __name__ == '__main__':
-  filename = 'rmp_T42_Gaussian_Gamil_128x60_Grid_bilinear.nc'
+  #filename = 'rmp_ll1deg_grid_licom_eq1x1_degree_Grid_bilinear.nc'
+  #filename = 'rmp_Ocean_1v1_triplepole_T42_Gaussian_bilinear.nc'
+  filename = 'rmp_T42_Gaussian_Ocean_1v1_triplepole_bilinear.nc'
+  #filename = 'rmp_T42_Gaussian_licom_eq1x1_degree_Grid_bilinear.nc'
+  #filename = 'rmp_T42_Gaussian_POP43_idw.nc'
   srcname, dstname, algname = parse(filename)
   [src_coords_lat, src_coords_lon, dst_coords_lat, dst_coords_lon, remap_src_indx, remap_dst_indx, remap_matrix_compact] = load_rmpwfile(filename)
   dst_data = []
-  for i in xrange(max(remap_dst_indx) + 1):
+  dst_grid_size = 360*200
+  #for i in xrange(max(remap_dst_indx) + 1):
+  for i in xrange(dst_grid_size):
     dst_data.append(0.0)
   for i in xrange(len(remap_matrix_compact)):
     lat = src_coords_lat[remap_src_indx[i]] * math.pi / 180
     lon = src_coords_lon[remap_src_indx[i]] * math.pi / 180
-    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func1(lat, lon)
+    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func2(lat, lon)
   
   i = 0
   lat_lst = []
@@ -79,7 +85,7 @@ if __name__ == '__main__':
     if item:
       lat = dst_coords_lat[i] * math.pi / 180
       lon = dst_coords_lon[i] * math.pi / 180
-      real = test_func1(lat, lon)
+      real = test_func2(lat, lon)
       r_err = abs(real - item) / real
       real_lst.append(real)
       item_lst.append(item)
@@ -95,6 +101,7 @@ if __name__ == '__main__':
   print len(diff_lst)
   print len(lat_lst)
   print len(lon_lst) 
+  lon_lst = [item - 180 for item in lon_lst]
   realdata_obj = nchandler(len(dst_data), lat_lst, lon_lst, real_lst, srcname, dstname, 'real', algname)
   remapdata_obj = nchandler(len(dst_data), lat_lst, lon_lst, item_lst, srcname, dstname, 'remap', algname)
   errordata_obj = nchandler(len(dst_data), lat_lst, lon_lst, diff_lst, srcname, dstname, 'error', algname)

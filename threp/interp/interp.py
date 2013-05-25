@@ -180,6 +180,8 @@ class Interp(Exception):
           self.remap_src_indx.append(self.remap_matrix_indx[i][j])
           self.remap_dst_indx.append(k)
           j += 1
+      #else:
+      #  self.remap_dst_indx.append(k)
       k += 1
       i += 1  
     
