@@ -11,9 +11,9 @@ def test_func1(lat, lon):
   val_tmp = -math.cos(lat) * math.cos(lon)
   return 2 + math.cos(math.acos(val_tmp) / 2) 
 
-# 2 + cos(lat)^2 * sin(2lon)
+# 2 + cos(lat)^2 * cos(2lon)
 def test_func2(lat, lon):
-  return 2 + math.cos(lat) ** 2 * math.sin(2 * lon)  
+  return 2 + math.cos(lat) ** 2 * math.cos(2 * lon)  
 
 # 2 + sin(2lat)^16 * cos(16lon)
 def test_func3(lat, lon):
@@ -34,15 +34,25 @@ def load_rmpwfile(fname):
 if __name__ == '__main__':
   #filename = 'rmp_POP43_T42_Gaussian_idw.nc'
   #filename = 'rmp_POP43_T42_Gaussian_bilinear.nc'
+  #filename = 'rmp_T42_Gaussian_mask_POP43_idw.nc'
   #filename = 'rmp_POP43_T42_Gaussian_bilinear_old.nc'
   #filename = 'rmp_T42_Gaussian_POP43_idw.nc' 
+  filename = 'rmp_gx1v1_T42_Gaussian_bilinear.nc'
   #filename = 'rmp_T42_Gaussian_Ocean_1v1_triplepole_bilinear.nc'
   #filename = 'rmp_Ocean_1v1_triplepole_T42_Gaussian_bilinear.nc'
+<<<<<<< HEAD
   filename = 'rmp_ll1deg_grid_ll2_bilinear.nc'
   #filename = 'rmp_ll1deg_grid_ll2_bilinear.nc'
+=======
+  #filename = 'rmp_T42_Gaussian_mask_POP43_bilinear.nc'
+>>>>>>> independent
   #filename = 'rmp_T42_Gaussian_Gamil_128x60_Grid_bilinear.nc' 
   #filename = 'rmp_T42_Gaussian_mask_POP43_idw.nc' 
-  #filename = 'rmp_T42_Gaussian_mask_POP43_bilinear.nc' 
+  #filename = 'rmp_ll1deg_grid_licom_eq1x1_degree_Grid_bilinear.nc' 
+  #filename = 'rmp_Ocean_1v1_triplepole_T42_Gaussian_bilinear.nc'
+  #filename = 'rmp_T42_Gaussian_Ocean_1v1_triplepole_bilinear.nc'
+  #filename = 'rmp_POP43_T42_Gaussian_idw_nearest3.nc'
+  #filename = 'rmp_T42_Gaussian_POP43_bilinear.nc'
   #filename = 'rmp_T42_Gaussian_POP43_bilinear.nc' 
   #filename = 'rmp_T42_Gaussian_mask_POP43_bilinear.nc' 
   #filename = 'rmp_atmos_fv_0_POP43_bilinear.nc'
@@ -56,7 +66,7 @@ if __name__ == '__main__':
   for i in range(len(remap_matrix_compact)):
     lat = src_coords_lat[remap_src_indx[i]] * math.pi / 180
     lon = src_coords_lon[remap_src_indx[i]] * math.pi / 180
-    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func1(lat, lon)
+    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func3(lat, lon)
     #if remap_dst_indx[i] == 1556:
     #  print 'begin'
     #  print src_coords_lat[remap_src_indx[i]]
@@ -79,15 +89,17 @@ if __name__ == '__main__':
   cnt = 0
   err_acc = 0.0
   max_err = 0.0
+  rmse = 0.0
   i = 0
   print len(dst_data)
   for item in dst_data:
     if item:
       lat = dst_coords_lat[i] * math.pi / 180
       lon = dst_coords_lon[i] * math.pi / 180
-      real = test_func1(lat, lon)
+      real = test_func3(lat, lon)
       r_err = abs(real - item) / real
-      if r_err > 0.00001:
+      rmse += (real - item) **2
+      if r_err > 0.02:
         print i
         print dst_coords_lat[i] 
         print dst_coords_lon[i]
@@ -102,8 +114,10 @@ if __name__ == '__main__':
     i += 1
   
   avg_err = err_acc / cnt
-  
+  rmse = rmse / (cnt - 1)
+
   print 'cnt', cnt
   print 'average relative error is', avg_err
   print 'max relative error is', max_err
+  print 'rmse is', rmse
   

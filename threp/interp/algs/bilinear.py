@@ -197,16 +197,22 @@ if __name__ == '__main__':
   comm = MPI.COMM_WORLD
   size = comm.Get_size()
   rank = comm.Get_rank()
-  #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
-  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc')
+  #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', False)
+  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', False)
   #test_obj = Bilinear('../../../grid/More/atmos_grid_SCRIPTS_0.47x0.63.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
   #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/More/atmos_grid_SCRIPTS_0.47x0.63.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
   #test_obj = Bilinear('../../../grid/More/Ocean_1v1_for_SCRIP.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
+<<<<<<< HEAD
   test_obj = Bilinear('../../../grid/factory/T42_Gaussian_mask.nc', '../../../grid/factory/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
+=======
+  #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/More/Ocean_1v1_triplepole.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
+  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/More/ne30np4-t2.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
+  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/More/Ocean_1v1_triplepole.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
+>>>>>>> independent
   #test_obj = Bilinear('../../../grid/More/Ocean_1v1_triplepole.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
   #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/More/Ocean_1v1_triplepole.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
   #test_obj = Bilinear('../../../grid/More/atmos_fv_0.9v1.25_for_SCRIP.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
+  test_obj = Bilinear('../../../grid/realdataT42_masked.nc', '../../../grid/realdataPOP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
   #test_obj = Bilinear('../../../grid/T42_Gaussian.nc', '../../../grid/Gamil_128x60_Grid.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', False)
   #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc')
   print test_obj.dst_grid_size

@@ -20,7 +20,7 @@ class Idw(Interp):
   # init self.eps to avoid deviding by zero, init the search object self.idw_obj
   def __init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name, k, pole_flag):
     Interp.__init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name)
-    self.power = 2
+    self.power = 1
     self.eps = 1.0e-6
     self.nearest_k = k
     self.idw_obj = Search(self.stree_base_obj, self.stree)
@@ -171,8 +171,8 @@ if __name__ == '__main__':
   #test_obj = Idw('../../grid/POP43.nc', '../../grid/T42.nc', 4)
   #test_obj = Idw('../../grid/T42.nc', '../../grid/POP43.nc', 4)
   #test_obj = Idw('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/masked_T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', 4)
-  #test_obj = Idw('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', True, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', 4)
-  test_obj = Idw('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', 4, True)
+  test_obj = Idw('../../../grid/realdataT42_masked.nc', '../../../grid/realdataPOP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', 3, False)
+  #test_obj = Idw('../../../grid/ll1deg_POP43/POP43.nc', '../../../grid/ll1deg_POP43/ll1deg_grid.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', 4, False)
   test_obj.dst_distribute(rank, size)
   test_obj.interp()
   # for mpi use
