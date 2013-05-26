@@ -542,7 +542,7 @@ class KDTree(object):
             return self.traverse_no_checking_opt(node.less) + \
                    self.traverse_no_checking_opt(node.greater)
 
-    @cache
+    #@cache
     def traverse_checking_opt(self, node, rect, x, r, p = 2., eps = 0):
         if rect.min_distance_point(x, p) > r / (1. + eps):
             return []

@@ -8,6 +8,7 @@ __author__ = ['Hong Wu<xunzhangthu@gmail.com>']
 
 import threp_import
 from bilinearbox import Bilinearbox
+from sbilinearbox import SBilinearbox
 from interp import Interp
 from bilinear_solver import Bilinear_Solver
 from bilinear_predictor import Bilinear_Predictor
@@ -19,14 +20,14 @@ from writenc import Writenc
 from mpi4py import MPI
 import time
 
-debug_coord_lst = []
-
 class Bilinear(Interp):
   
-  def __init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name, pole_flag):
+  def __init__(self, model_case, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name, pole_flag):
     Interp.__init__(self, src_grid_file_name, dst_grid_file_name, online_flag, realdata_file_name) 
     self.bilinearbox_obj = Bilinearbox(self.stree_base_obj, self.stree)
+    self.sbilinearbox_obj = SBilinearbox(self.stree_base_obj, self.stree)
     self.pole_flag = pole_flag
+    self.model_case = model_case
   
   def check_triangle(self, box):
     for i in xrange(4):
@@ -50,8 +51,6 @@ class Bilinear(Interp):
   
   # interp process in Bilinear subclass.
   def interp(self):
-    #point = (self.dst_grid_center_lon[0], self.dst_grid_center_lat[0])
-    #point = (0.0, 0.0)
     n = len(self.dst_grid_center_lon)
     for i in xrange(n):
       # ignore masked pnt
@@ -61,10 +60,9 @@ class Bilinear(Interp):
         self.remap_matrix_indx.append([])
         continue
       
-      # debug recovery function
-      #dst_point = (357.625, -82.375)
       dst_point = (self.dst_grid_center_lon[i], self.dst_grid_center_lat[i])
       indx, lst = self.bilinearbox_obj.find_nearest_k(dst_point, 4)
+         
       # suppose atom grid has no mask
       # case ocn2atm, a atm cell with a land cell below
       if Interp.check_all_masks(self, indx, 4):
@@ -72,6 +70,7 @@ class Bilinear(Interp):
         self.remap_matrix.append([])
         self.remap_matrix_indx.append([])
         continue
+
       # decide if dst pnt is coincide with a src pnt
       local_wgt = []
       if dst_point in lst:
@@ -111,9 +110,12 @@ class Bilinear(Interp):
           self.remap_matrix.append(bilinear_solver.wgt_lst)
           self.remap_matrix_indx.append(bilinear_box_indx)
           continue
-        
-      # find a bilinear box
-      outside_flag, full_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
+      
+      if self.model_case == 'a2o': 
+        outside_flag, full_flag, bilinear_box_indx, bilinear_box = self.sbilinearbox_obj.find_nearest_box(dst_point)
+      else:
+        # find a bilinear box
+        outside_flag, full_flag, bilinear_box_indx, bilinear_box = self.bilinearbox_obj.find_nearest_box(dst_point)
       
       # can not find 4 cells with no masks
       # use idw algorithm instead
@@ -134,12 +136,9 @@ class Bilinear(Interp):
         predict_flag = True
         print 'predictor case.'
         bilinear_solver = Bilinear_Predictor(dst_point, bilinear_box)
-        bilinear_solver.predict() 
+        bilinear_solver.predict()
         # print debug info in detail
         if outside_flag:
-          print 'start of debug'
-          debug_coord_lst.append(dst_point)
-          print 'end of debug'
           print 'outside'
           if not is_convex_quadrangle(bilinear_box):
             print 'it is a non-convex quadrangle, so it must be outside.'
@@ -151,6 +150,14 @@ class Bilinear(Interp):
         print dst_point  
         print bilinear_box
         print 'normal case'
+          
+        # meet the demanding from prof. wanglanning
+        mask_cnt = 0
+        for i in bilinear_box_indx:
+          if self.sbilinearbox_obj.stree_base.grid_imask[i] == 0:
+            mask_cnt += 1
+
+
         bilinear_solver = Bilinear_Solver(dst_point, bilinear_box) 
         branch = self.switch(bilinear_box)
         if branch == 1:
@@ -159,6 +166,51 @@ class Bilinear(Interp):
           bilinear_solver.solve_bilinear_case2()
         if branch == 3: 
           bilinear_solver.solve_bilinear_case3()
+          
+        if self.model_case == 'a2o' and mask_cnt != 2 and mask_cnt != 0: 
+          local_indx = []
+          local_wgt_lst = []
+          # land cell master
+          if mask_cnt == 3:
+            localcnt = 0
+            for i in bilinear_box_indx:
+              if self.sbilinearbox_obj.stree_base.grid_imask[i] == 1:
+                save_wgt = bilinear_solver.wgt_lst[localcnt] 
+              localcnt += 1
+            add = save_wgt / 3
+            localcnt = 0
+            for i in bilinear_box_indx:
+              local_indx.append(i)
+              if self.sbilinearbox_obj.stree_base.grid_imask[i] == 0:
+                local_wgt_lst.append(bilinear_solver.wgt_lst[localcnt] + add)
+              else:
+                local_wgt_lst.append(0.0)
+              localcnt += 1
+          # ocn cell master
+          if mask_cnt == 1:
+            localcnt = 0
+            for i in bilinear_box_indx:
+              if self.sbilinearbox_obj.stree_base.grid_imask[i] == 0:
+                save_wgt = bilinear_solver.wgt_lst[localcnt] 
+              localcnt += 1
+            add = save_wgt / 3
+            localcnt = 0
+            for i in bilinear_box_indx:
+              local_indx.append(i)
+              if self.sbilinearbox_obj.stree_base.grid_imask[i] == 1:
+                local_wgt_lst.append(bilinear_solver.wgt_lst[localcnt] + add)
+              else:
+                local_wgt_lst.append(0.0)
+              localcnt += 1
+          print 'wangln'
+          print local_wgt_lst
+          print mask_cnt
+          self.remap_matrix.append(local_wgt_lst)
+          local_indx = Interp.indx_recovery(self, local_indx)
+          self.remap_matrix_indx.append(local_indx)
+          continue
+        else:
+          pass
 
       # transferm ghost bilinear_box_indx to original
       bilinear_box_indx = Interp.indx_recovery(self, bilinear_box_indx)
@@ -202,26 +254,8 @@ if __name__ == '__main__':
   comm = MPI.COMM_WORLD
   size = comm.Get_size()
   rank = comm.Get_rank()
-  #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', False)
-  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', False)
-  #test_obj = Bilinear('../../../grid/More/atmos_grid_SCRIPTS_0.47x0.63.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/More/atmos_grid_SCRIPTS_0.47x0.63.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/More/Ocean_1v1_for_SCRIP.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/factory/T42_Gaussian_mask.nc', '../../../grid/factory/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/masked_T42_Gaussian_POP43/T42_Gaussian_mask.nc', '../../../grid/More/Ocean_1v1_triplepole.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/More/ne30np4-t2.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/More/Ocean_1v1_triplepole.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/More/Ocean_1v1_triplepole.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc', '../../../grid/More/Ocean_1v1_triplepole.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/More/atmos_fv_0.9v1.25_for_SCRIP.nc', '../../../grid/T42_Gaussian_POP43/POP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  test_obj = Bilinear('../../../grid/realdataT42_masked.nc', '../../../grid/realdataPOP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
-  #test_obj = Bilinear('../../../grid/T42_Gaussian.nc', '../../../grid/Gamil_128x60_Grid.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0006-12.nc', False)
-  #test_obj = Bilinear('../../../grid/T42_Gaussian_POP43/POP43.nc', '../../../grid/T42_Gaussian_POP43/T42_Gaussian.nc')
-  print test_obj.dst_grid_size
-  print test_obj.dst_grid_dims
-  print test_obj.dst_grid_corners
-  print test_obj.dst_grid_rank
-  print len(test_obj.dst_grid_center_lat)
+  test_obj = Bilinear('a2o', '../../../grid/realdataT42_masked.nc', '../../../grid/realdataPOP43.nc', False, '../../../data/real/T42_Gaussian_Grid/T42_avXa2c_a_Faxa_lwdn-0007-08.nc', False)
+
   # for mpi use
   test_obj.dst_distribute(rank, size)
   test_obj.interp()
@@ -238,10 +272,3 @@ if __name__ == '__main__':
     end = time.time()
     print end - start
     print remap_result 
-  
-  print ''
-  print ''
-  print ''
-  # for test
-  for item in debug_coord_lst:
-    print item

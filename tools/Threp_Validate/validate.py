@@ -33,19 +33,16 @@ def load_rmpwfile(fname):
 
 if __name__ == '__main__':
   #filename = 'rmp_POP43_T42_Gaussian_idw.nc'
-  #filename = 'rmp_POP43_T42_Gaussian_bilinear.nc'
+  filename = 'rmp_POP43_T42_Gaussian_bilinear.nc'
   #filename = 'rmp_T42_Gaussian_mask_POP43_idw.nc'
   #filename = 'rmp_POP43_T42_Gaussian_bilinear_old.nc'
   #filename = 'rmp_T42_Gaussian_POP43_idw.nc' 
-  filename = 'rmp_gx1v1_T42_Gaussian_bilinear.nc'
+  #filename = 'rmp_gx1v1_T42_Gaussian_bilinear.nc'
   #filename = 'rmp_T42_Gaussian_Ocean_1v1_triplepole_bilinear.nc'
   #filename = 'rmp_Ocean_1v1_triplepole_T42_Gaussian_bilinear.nc'
-<<<<<<< HEAD
-  filename = 'rmp_ll1deg_grid_ll2_bilinear.nc'
   #filename = 'rmp_ll1deg_grid_ll2_bilinear.nc'
-=======
+  #filename = 'rmp_ll1deg_grid_ll2_bilinear.nc'
   #filename = 'rmp_T42_Gaussian_mask_POP43_bilinear.nc'
->>>>>>> independent
   #filename = 'rmp_T42_Gaussian_Gamil_128x60_Grid_bilinear.nc' 
   #filename = 'rmp_T42_Gaussian_mask_POP43_idw.nc' 
   #filename = 'rmp_ll1deg_grid_licom_eq1x1_degree_Grid_bilinear.nc' 
@@ -66,7 +63,7 @@ if __name__ == '__main__':
   for i in range(len(remap_matrix_compact)):
     lat = src_coords_lat[remap_src_indx[i]] * math.pi / 180
     lon = src_coords_lon[remap_src_indx[i]] * math.pi / 180
-    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func3(lat, lon)
+    dst_data[remap_dst_indx[i]] += remap_matrix_compact[i] * test_func2(lat, lon)
     #if remap_dst_indx[i] == 1556:
     #  print 'begin'
     #  print src_coords_lat[remap_src_indx[i]]
@@ -96,7 +93,7 @@ if __name__ == '__main__':
     if item:
       lat = dst_coords_lat[i] * math.pi / 180
       lon = dst_coords_lon[i] * math.pi / 180
-      real = test_func3(lat, lon)
+      real = test_func2(lat, lon)
       r_err = abs(real - item) / real
       rmse += (real - item) **2
       if r_err > 0.02:
